@@ -50,14 +50,27 @@
     </header>
 
     <div class="management-bar">
-        <span style="letter-spacing: 2px; font-weight: bold; font-size: 14px;">HOSTESS MANAGEMENT</span>
+    <span style="letter-spacing: 2px; font-weight: bold; font-size: 14px;">HOSTESS MANAGEMENT</span>
+    <div>
         <button class="reset-btn" onclick="resetQueue()">RESET QUEUE</button>
+        <button class="reset-btn" style="background:#555; margin-left:10px;" onclick="logout()">LOGOUT</button>
     </div>
+</div>
 
     <div class="tabs-container" id="tabs-nav"></div>
     <div class="main-card"><div id="tab-container"></div></div>
 
 <script>
+
+    // Security Check: Redirect to login if no valid session exists
+    const session = localStorage.getItem('psa_admin_session');
+    const currentTime = new Date().getTime();
+
+    if (!session || currentTime > session) {
+        localStorage.removeItem('psa_admin_session');
+        window.location.href = "login.html";
+    }
+    
     // --- 1. FIREBASE CONFIG ---
     const firebaseConfig = { databaseURL: "https://psa-queue-default-rtdb.asia-southeast1.firebasedatabase.app/" };
     firebase.initializeApp(firebaseConfig);
@@ -229,6 +242,11 @@
             db.ref('/').remove(); 
             location.reload();
         }
+    }
+
+    function logout() {
+        localStorage.removeItem('psa_admin_session');
+        window.location.href = "login.html";
     }
 
     // Call init first
