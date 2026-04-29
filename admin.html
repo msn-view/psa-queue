@@ -358,13 +358,16 @@
 
         // Move current serving to history
 
-        if (display[dept]) {
-
-            history.unshift({...display[dept], dept: dept, timestamp: Date.now()});
-
-            if (history.length > 8) history.pop();
-
-        }
+        // Inside your admin.html serve function
+if (display[dept]) {
+    history.unshift({
+        num: display[dept].num,
+        type: display[dept].type, // <--- Ensure this line exists
+        table: display[dept].table,
+        dept: dept,
+        timestamp: Date.now()
+    });
+}
 
 
 
