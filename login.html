@@ -21,17 +21,10 @@
 
         /* Background Image Fixed */
         .bg-image {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('psabg.png');
-            background-size: cover;
-            background-position: center;
-            filter: blur(5px);
-            transform: scale(1.1); /* Prevents white edges from blur */
-            z-index: -1;
+    background-image: url('psabg.png');
+    background-size: cover;
+    filter: blur(5px); /* Adjust the pixels for more or less blur */
+    transform: scale(1.1); /* Scales up to hide the blurred edges */
         }
 
         /* Login Card */
