@@ -96,6 +96,26 @@
             margin-top: 15px;
             display: none;
         }
+
+        .show-password-container {
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Ensure the checkbox label doesn't inherit the heavy label style */
+.show-password-container label {
+    margin-bottom: 0;
+    cursor: pointer;
+    color: #666;
+}
+
+#togglePass {
+    width: auto; /* Overrides the 100% width of standard inputs */
+    cursor: pointer;
+}
+        
     </style>
 </head>
 <body>
@@ -112,9 +132,14 @@
         </div>
 
         <div class="input-group">
-            <label>Password</label>
-            <input type="password" id="password" placeholder="Enter password">
-        </div>
+    <label>Password</label>
+    <input type="password" id="password" placeholder="Enter password">
+    
+    <div class="show-password-container">
+        <input type="checkbox" id="togglePass" onclick="togglePassword()">
+        <label for="togglePass" style="display:inline; font-size: 12px; font-weight: normal;">Show Password</label>
+    </div>
+    </div>
 
         <button onclick="handleLogin()">LOGIN</button>
         <p class="error" id="errorMsg">Invalid username or password.</p>
@@ -143,6 +168,19 @@
         document.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') handleLogin();
         });
+
+        function togglePassword() {
+    const passwordField = document.getElementById("password");
+    const toggleCheckbox = document.getElementById("togglePass");
+    
+    if (toggleCheckbox.checked) {
+        // Change type to text to reveal characters
+        passwordField.type = "text";
+    } else {
+        // Change type back to password to hide characters
+        passwordField.type = "password";
+    }
+}
     </script>
 </body>
 </html>
