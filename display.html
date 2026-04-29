@@ -210,21 +210,36 @@
             }
         });
 
-        // Previous Calls Rendering
-        const histListEl = document.getElementById('historyList');
+        // --- RENDER HISTORY (FOOTER) ---
+const histListEl = document.getElementById('historyList');
 
-// Show last 4 "Pending" tickets
 histListEl.innerHTML = history.slice(0, 4).map(item => `
-    <div class="history-item" style="border-left-color: ${
-        item.dept === 'REGISTRATION' ? 'var(--reg-red)' : 
-        item.dept === 'UPDATING' ? 'var(--upd-yellow)' : 'var(--pri-blue)'
-    }">
-        <span style="font-size: 0.8rem; color: #94a3b8; text-transform: uppercase; font-weight: bold;">${item.dept}</span>
-        <div style="margin-top: 2px;">
-            <b style="font-size: 1.2rem;">Ticket #${item.num}</b> 
-            <span style="font-size: 1.1rem; font-weight: bold; margin-left: 10px;">(${item.type})</span>
+    <div class="history-card" style="
+        background: #1e293b; 
+        padding: 12px 20px; 
+        border-radius: 12px; 
+        min-width: 250px; 
+        position: relative; 
+        overflow: hidden; 
+        border-left: 6px solid ${
+            item.dept === 'REGISTRATION' ? 'var(--reg-red)' : 
+            item.dept === 'UPDATING' ? 'var(--upd-yellow)' : 'var(--pri-blue)'
+        }; 
+        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        animation: popIn 0.5s ease-out;">
+        
+        <span style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; font-weight: 800; display: block; letter-spacing: 1px;">
+            ${item.dept}
+        </span>
+        
+        <div style="display: flex; align-items: baseline; gap: 10px; margin-top: 2px;">
+            <b style="font-size: 1.5rem; color: white;">Ticket #${item.num}</b>
+            <span style="font-size: 1.1rem; font-weight: 800; color: white;">(${item.type})</span>
         </div>
-        <small style="color: #cbd5e1; display: block; margin-top: 2px;">Table #${item.table}</small>
+        
+        <div style="font-size: 0.9rem; color: #cbd5e1; margin-top: 2px; font-weight: bold;">
+            Table #${item.table}
+        </div>
     </div>
 `).join('');
     });
