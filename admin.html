@@ -58,31 +58,16 @@
     <div class="main-card"><div id="tab-container"></div></div>
 
 <script>
-    // --- FIREBASE CONFIG ---
+    // --- 1. FIREBASE CONFIG ---
     const firebaseConfig = { databaseURL: "https://psa-queue-default-rtdb.asia-southeast1.firebasedatabase.app/" };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
     const depts = ['REGISTRATION', 'UPDATING', 'PRINTING'];
     let localQueues = { REGISTRATION: { REGULAR: [], PRIORITY: [] }, UPDATING: { REGULAR: [], PRIORITY: [] }, PRINTING: { REGULAR: [], PRIORITY: [] } };
+    let isInitialized = false;
 
-    // Listen for data from Cloud
-    db.ref('/').on('value', (snapshot) => {
-        const data = snapshot.val() || {};
-        const counters = data.counters || { REGISTRATION: {REGULAR:1, PRIORITY:1}, UPDATING: {REGULAR:1, PRIORITY:1}, PRINTING: {REGULAR:1, PRIORITY:1} };
-        const history = data.queue_history || [];
-        const display = data.queue_display || {};
-        
-        // Sync Local Queues if data exists
-        localQueues = data.queues || localQueues;
-        
-        window.currentCounters = counters;
-        window.currentHistory = history;
-        window.currentDisplay = display;
-
-        depts.forEach(d => render(d));
-    });
-
+    // --- 2. INITIALIZE UI FIRST ---
     function init() {
         document.getElementById('tabs-nav').innerHTML = depts.map((d, i) => 
             `<button class="tab-link ${i===0?'active':''}" onclick="openTab(event, '${d}')">${d}</button>`).join('');
@@ -110,7 +95,34 @@
                 </div>
             </div>
         `).join('');
+        isInitialized = true;
     }
+
+    // --- 3. FIREBASE LISTENER ---
+    db.ref('/').on('value', (snapshot) => {
+        if (!isInitialized) return; // Wait until init() is done
+
+        const data = snapshot.val() || {};
+        const counters = data.counters || { 
+            REGISTRATION: {REGULAR:1, PRIORITY:1}, 
+            UPDATING: {REGULAR:1, PRIORITY:1}, 
+            PRINTING: {REGULAR:1, PRIORITY:1} 
+        };
+        const history = data.queue_history || [];
+        const display = data.queue_display || {};
+        
+        localQueues = data.queues || { 
+            REGISTRATION: { REGULAR: [], PRIORITY: [] }, 
+            UPDATING: { REGULAR: [], PRIORITY: [] }, 
+            PRINTING: { REGULAR: [], PRIORITY: [] } 
+        };
+        
+        window.currentCounters = counters;
+        window.currentHistory = history;
+        window.currentDisplay = display;
+
+        depts.forEach(d => render(d));
+    });
 
     function openTab(evt, deptName) {
         document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
@@ -120,7 +132,13 @@
     }
 
     function addTicket(dept, type) {
+        if (!window.currentCounters) return;
         const nextNum = window.currentCounters[dept][type];
+        
+        // Ensure the array exists before pushing
+        if (!localQueues[dept]) localQueues[dept] = { REGULAR: [], PRIORITY: [] };
+        if (!localQueues[dept][type]) localQueues[dept][type] = [];
+        
         localQueues[dept][type].push(nextNum);
         window.currentCounters[dept][type]++;
         
@@ -157,23 +175,39 @@
     }
 
     function render(dept) {
-        document.getElementById(`list-${dept}-REGULAR`).innerHTML = (localQueues[dept].REGULAR || []).map((num, i) => `
+        const regList = document.getElementById(`list-${dept}-REGULAR`);
+        const priList = document.getElementById(`list-${dept}-PRIORITY`);
+        
+        if (!regList || !priList) return;
+
+        regList.innerHTML = (localQueues[dept].REGULAR || []).map((num, i) => `
             <div class="queue-row"><h3>#${num} (REG)</h3><button class="serve-btn" onclick="serve('${dept}', 'REGULAR', ${i})">SERVE</button></div>`).join('');
         
-        document.getElementById(`list-${dept}-PRIORITY`).innerHTML = (localQueues[dept].PRIORITY || []).map((num, i) => `
+        priList.innerHTML = (localQueues[dept].PRIORITY || []).map((num, i) => `
             <div class="queue-row"><h3>#${num} (PRI)</h3><button class="serve-btn" onclick="serve('${dept}', 'PRIORITY', ${i})">SERVE</button></div>`).join('');
 
         const d = window.currentDisplay || {};
-        document.getElementById(`now-${dept}`).innerText = d[dept] ? `#${d[dept].num} (${d[dept].type})` : "NONE";
+        const nowEl = document.getElementById(`now-${dept}`);
+        if (nowEl) nowEl.innerText = d[dept] ? `#${d[dept].num} (${d[dept].type})` : "NONE";
 
         const h = window.currentHistory || [];
         const deptH = h.filter(item => item.dept === dept);
-        document.getElementById(`history-list-${dept}`).innerHTML = deptH.map(item => `
-            <div class="history-row"><span>#${item.num} (${item.type})</span><button class="serve-btn" style="background:#4a5568" onclick="markHistoryDone(${item.timestamp})">DONE</button></div>
-        `).join('') || '<div style="color:#a0aec0; font-size:12px">No pending no-shows.</div>';
+        const histEl = document.getElementById(`history-list-${dept}`);
+        if (histEl) {
+            histEl.innerHTML = deptH.map(item => `
+                <div class="history-row"><span>#${item.num} (${item.type})</span><button class="serve-btn" style="background:#4a5568" onclick="markHistoryDone(${item.timestamp})">DONE</button></div>
+            `).join('') || '<div style="color:#a0aec0; font-size:12px">No pending no-shows.</div>';
+        }
     }
 
-    function resetQueue() { if(confirm("Reset all?")) db.ref('/').remove(); }
+    function resetQueue() { 
+        if(confirm("Reset all? This will clear all data from the cloud.")) {
+            db.ref('/').remove(); 
+            location.reload();
+        }
+    }
+
+    // Call init first
     init();
 </script>
 </body>
