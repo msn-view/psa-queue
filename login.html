@@ -19,13 +19,20 @@
             overflow: hidden;
         }
 
-        /* Background Image with Blur */
-       .bg-image {
-    background-image: url('psabg.png');
-    background-size: cover;
-    filter: blur(5px); /* Adjust the pixels for more or less blur */
-    transform: scale(1.1); /* Scales up to hide the blurred edges */
-}
+        /* Background Image Fixed */
+        .bg-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('psabg.png');
+            background-size: cover;
+            background-position: center;
+            filter: blur(5px);
+            transform: scale(1.1); /* Prevents white edges from blur */
+            z-index: -1;
+        }
 
         /* Login Card */
         .login-card {
@@ -56,7 +63,8 @@
             text-align: left;
         }
 
-        label {
+        /* Main Labels */
+        .input-group label:first-child {
             display: block;
             margin-bottom: 5px;
             color: #555;
@@ -64,7 +72,8 @@
             font-size: 13px;
         }
 
-        input {
+        input[type="text"], 
+        input[type="password"] {
             width: 100%;
             padding: 12px;
             border: 1px solid #ddd;
@@ -97,25 +106,28 @@
             display: none;
         }
 
+        /* Show Password Styles */
         .show-password-container {
-    margin-top: 8px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-/* Ensure the checkbox label doesn't inherit the heavy label style */
-.show-password-container label {
-    margin-bottom: 0;
-    cursor: pointer;
-    color: #666;
-}
+        .show-password-container label {
+            margin: 0 !important;
+            cursor: pointer;
+            color: #666;
+            font-weight: normal !important;
+            font-size: 12px !important;
+            display: inline !important;
+        }
 
-#togglePass {
-    width: auto; /* Overrides the 100% width of standard inputs */
-    cursor: pointer;
-}
-        
+        #togglePass {
+            cursor: pointer;
+            width: auto;
+            margin: 0;
+        }
     </style>
 </head>
 <body>
@@ -132,14 +144,14 @@
         </div>
 
         <div class="input-group">
-    <label>Password</label>
-    <input type="password" id="password" placeholder="Enter password">
-    
-    <div class="show-password-container">
-        <input type="checkbox" id="togglePass" onclick="togglePassword()">
-        <label for="togglePass" style="display:inline; font-size: 12px; font-weight: normal;">Show Password</label>
-    </div>
-    </div>
+            <label>Password</label>
+            <input type="password" id="password" placeholder="Enter password">
+            
+            <div class="show-password-container">
+                <input type="checkbox" id="togglePass" onclick="togglePassword()">
+                <label for="togglePass">Show Password</label>
+            </div>
+        </div>
 
         <button onclick="handleLogin()">LOGIN</button>
         <p class="error" id="errorMsg">Invalid username or password.</p>
@@ -151,36 +163,24 @@
             const pass = document.getElementById('password').value;
             const error = document.getElementById('errorMsg');
 
-            // Your specific credentials
             if (user === "NEGOCC-PHILSYS" && pass === "ADMIN-PHILSYS@2026") {
-                // Store login status for 24 hours
                 const expiry = new Date().getTime() + (24 * 60 * 60 * 1000);
                 localStorage.setItem('psa_admin_session', expiry);
-                
-                // Redirect to Admin page
                 window.location.href = "admin.html";
             } else {
                 error.style.display = "block";
             }
         }
 
-        // Allow pressing "Enter" to login
+        function togglePassword() {
+            const passwordField = document.getElementById("password");
+            const toggleCheckbox = document.getElementById("togglePass");
+            passwordField.type = toggleCheckbox.checked ? "text" : "password";
+        }
+
         document.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') handleLogin();
         });
-
-        function togglePassword() {
-    const passwordField = document.getElementById("password");
-    const toggleCheckbox = document.getElementById("togglePass");
-    
-    if (toggleCheckbox.checked) {
-        // Change type to text to reveal characters
-        passwordField.type = "text";
-    } else {
-        // Change type back to password to hide characters
-        passwordField.type = "password";
-    }
-}
     </script>
 </body>
 </html>
