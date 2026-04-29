@@ -211,17 +211,22 @@
         });
 
         // Previous Calls Rendering
-        const histEl = document.getElementById('historyList');
-        histEl.innerHTML = history.slice(0, 4).map(item => `
-            <div class="history-card" style="border-left-color: ${
-                item.dept === 'REGISTRATION' ? 'var(--reg-red)' : 
-                item.dept === 'UPDATING' ? 'var(--upd-yellow)' : 'var(--pri-blue)'
-            }">
-                <span>${item.dept}</span>
-                <b>Ticket #${item.num}</b>
-                <small>Table #${item.table}</small>
-            </div>
-        `).join('');
+        const histListEl = document.getElementById('historyList');
+
+// Show last 4 "Pending" tickets
+histListEl.innerHTML = history.slice(0, 4).map(item => `
+    <div class="history-item" style="border-left-color: ${
+        item.dept === 'REGISTRATION' ? 'var(--reg-red)' : 
+        item.dept === 'UPDATING' ? 'var(--upd-yellow)' : 'var(--pri-blue)'
+    }">
+        <span style="font-size: 0.8rem; color: #94a3b8; text-transform: uppercase; font-weight: bold;">${item.dept}</span>
+        <div style="margin-top: 2px;">
+            <b style="font-size: 1.2rem;">Ticket #${item.num}</b> 
+            <span style="font-size: 1.1rem; font-weight: bold; margin-left: 10px;">(${item.type})</span>
+        </div>
+        <small style="color: #cbd5e1; display: block; margin-top: 2px;">Table #${item.table}</small>
+    </div>
+`).join('');
     });
 </script>
 </body>
