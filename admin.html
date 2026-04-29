@@ -2,54 +2,39 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>PSA Negros Occidental - Hostess Management</title>
+    <title>PSA Admin - Firebase Cloud Sync</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    
     <style>
-        :root {
-            --psa-blue: #1a4a7c;
-            --psa-light-blue: #3e6d9c;
-            --psa-bg: #808080;
-            --accent-teal: #17a2b8;
-            --panel-bg: #d1d9e2;
-            --history-bg: #e2e8f0;
-        }
-
+        :root { --psa-blue: #1a4a7c; --psa-light-blue: #3e6d9c; --psa-bg: #808080; --accent-teal: #17a2b8; --panel-bg: #d1d9e2; --history-bg: #e2e8f0; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--psa-bg); margin: 0; padding: 0; }
         header { padding: 15px; display: flex; align-items: center; justify-content: center; color: white; }
         .logo { width: 70px; margin-right: 15px; }
         .header-text h1 { margin: 0; font-size: 24px; }
         .header-text p { margin: 0; font-size: 18px; text-align: center; font-weight: bold; }
-
         .management-bar { background: #222; color: white; width: 85%; margin: 10px auto; padding: 8px 20px; border-radius: 25px; display: flex; justify-content: space-between; align-items: center; }
         .reset-btn { background: #8b1a1a; color: white; border: none; padding: 5px 15px; border-radius: 15px; cursor: pointer; font-weight: bold; }
-
         .tabs-container { display: flex; justify-content: center; gap: 15px; margin: 15px 0; }
         .tab-link { background: white; color: var(--psa-blue); border: none; padding: 8px 30px; border-radius: 20px; font-weight: bold; cursor: pointer; transition: 0.3s; }
         .tab-link.active { background: var(--psa-light-blue); color: white; }
-
         .main-card { background: #fdfdfd; width: 950px; margin: 0 auto 40px; border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         .dept-title { text-align: center; color: var(--psa-blue); font-size: 28px; border-bottom: 2px solid #ccc; padding-bottom: 10px; margin-bottom: 15px; text-transform: uppercase; }
-
         .serving-box { background: var(--panel-bg); border-radius: 15px; padding: 15px; text-align: center; margin-bottom: 15px; }
         .serving-box h2 { color: var(--psa-blue); margin: 5px 0; font-size: 28px; font-weight: 800; }
         .mark-done-btn { background: var(--accent-teal); color: white; border: none; padding: 8px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; }
-
         .controls { display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 15px; }
         .add-btn { color: white; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: bold; }
         .add-reg { background: var(--psa-blue); }
         .add-pri { background: #2c3e50; }
-
         .queues-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
         .queue-panel { background: var(--panel-bg); border-radius: 12px; padding: 12px; min-height: 180px; }
         .queue-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #b8c1cc; }
         .queue-row h3 { margin: 0; color: var(--psa-blue); font-size: 18px; }
         .serve-btn { background: var(--accent-teal); color: white; border: none; padding: 5px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; }
-
-        /* New: Not Catered Section */
         .not-catered-section { background: var(--history-bg); border-radius: 12px; padding: 15px; border: 1px solid #cbd5e0; }
         .not-catered-title { color: #4a5568; font-size: 14px; font-weight: bold; margin-bottom: 10px; text-transform: uppercase; border-bottom: 1px solid #cbd5e0; padding-bottom: 5px; }
         .history-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #cbd5e0; }
-        .history-row span { font-weight: bold; color: #2d3748; }
-
         .tab-content { display: none; }
         .tab-content.active { display: block; }
     </style>
@@ -70,24 +55,33 @@
     </div>
 
     <div class="tabs-container" id="tabs-nav"></div>
-
-    <div class="main-card">
-        <div id="tab-container"></div>
-    </div>
+    <div class="main-card"><div id="tab-container"></div></div>
 
 <script>
+    // --- FIREBASE CONFIG ---
+    const firebaseConfig = { databaseURL: "https://psa-queue-default-rtdb.asia-southeast1.firebasedatabase.app/" };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
     const depts = ['REGISTRATION', 'UPDATING', 'PRINTING'];
-    let counters = JSON.parse(localStorage.getItem('psa_counters')) || {
-        REGISTRATION: { REGULAR: 1, PRIORITY: 1 },
-        UPDATING: { REGULAR: 1, PRIORITY: 1 },
-        PRINTING: { REGULAR: 1, PRIORITY: 1 }
-    };
-    
-    let queues = { 
-        REGISTRATION: { REGULAR: [], PRIORITY: [] }, 
-        UPDATING: { REGULAR: [], PRIORITY: [] }, 
-        PRINTING: { REGULAR: [], PRIORITY: [] } 
-    };
+    let localQueues = { REGISTRATION: { REGULAR: [], PRIORITY: [] }, UPDATING: { REGULAR: [], PRIORITY: [] }, PRINTING: { REGULAR: [], PRIORITY: [] } };
+
+    // Listen for data from Cloud
+    db.ref('/').on('value', (snapshot) => {
+        const data = snapshot.val() || {};
+        const counters = data.counters || { REGISTRATION: {REGULAR:1, PRIORITY:1}, UPDATING: {REGULAR:1, PRIORITY:1}, PRINTING: {REGULAR:1, PRIORITY:1} };
+        const history = data.queue_history || [];
+        const display = data.queue_display || {};
+        
+        // Sync Local Queues if data exists
+        localQueues = data.queues || localQueues;
+        
+        window.currentCounters = counters;
+        window.currentHistory = history;
+        window.currentDisplay = display;
+
+        depts.forEach(d => render(d));
+    });
 
     function init() {
         document.getElementById('tabs-nav').innerHTML = depts.map((d, i) => 
@@ -97,8 +91,7 @@
             <div id="${dept}" class="tab-content ${i===0?'active':''}">
                 <h1 class="dept-title">${dept}</h1>
                 <div class="serving-box">
-                    <small>CURRENTLY AT TABLE</small>
-                    <h2 id="now-${dept}">NONE</h2>
+                    <small>CURRENTLY AT TABLE</small><h2 id="now-${dept}">NONE</h2>
                     <button class="mark-done-btn" onclick="markDone('${dept}')">MARK AS DONE</button>
                 </div>
                 <div class="controls">
@@ -117,7 +110,6 @@
                 </div>
             </div>
         `).join('');
-        depts.forEach(d => render(d));
     }
 
     function openTab(evt, deptName) {
@@ -128,68 +120,60 @@
     }
 
     function addTicket(dept, type) {
-        queues[dept][type].push(counters[dept][type]++);
-        localStorage.setItem('psa_counters', JSON.stringify(counters));
-        render(dept);
+        const nextNum = window.currentCounters[dept][type];
+        localQueues[dept][type].push(nextNum);
+        window.currentCounters[dept][type]++;
+        
+        db.ref('/').update({ queues: localQueues, counters: window.currentCounters });
     }
 
     function serve(dept, type, index) {
-        const ticketNum = queues[dept][type][index];
+        const ticketNum = localQueues[dept][type][index];
         const table = document.getElementById(`table-${dept}`).value;
-        const display = JSON.parse(localStorage.getItem('queue_display')) || {};
-        const history = JSON.parse(localStorage.getItem('queue_history')) || [];
+        
+        const history = window.currentHistory || [];
+        const display = window.currentDisplay || {};
 
-        // If someone is currently serving, move them to history (the "Pending" list)
         if (display[dept]) {
             history.unshift({...display[dept], dept: dept, timestamp: Date.now()});
             if (history.length > 8) history.pop();
         }
 
         display[dept] = { num: ticketNum, type: type, table: table };
-        localStorage.setItem('queue_display', JSON.stringify(display));
-        localStorage.setItem('queue_history', JSON.stringify(history));
+        localQueues[dept][type].splice(index, 1);
 
-        queues[dept][type].splice(index, 1);
-        render(dept);
+        db.ref('/').update({ queue_display: display, queue_history: history, queues: localQueues });
     }
 
     function markDone(dept) {
-        const display = JSON.parse(localStorage.getItem('queue_display')) || {};
+        const display = window.currentDisplay || {};
         delete display[dept];
-        localStorage.setItem('queue_display', JSON.stringify(display));
-        render(dept);
+        db.ref('queue_display').set(display);
     }
 
-    // New Function: Mark a historical/returned client as done
-    function markHistoryDone(timestamp) {
-        let history = JSON.parse(localStorage.getItem('queue_history')) || [];
-        history = history.filter(item => item.timestamp !== timestamp);
-        localStorage.setItem('queue_history', JSON.stringify(history));
-        depts.forEach(d => render(d));
+    function markHistoryDone(ts) {
+        const history = window.currentHistory.filter(item => item.timestamp !== ts);
+        db.ref('queue_history').set(history);
     }
 
     function render(dept) {
-        document.getElementById(`list-${dept}-REGULAR`).innerHTML = queues[dept].REGULAR.map((num, i) => `
+        document.getElementById(`list-${dept}-REGULAR`).innerHTML = (localQueues[dept].REGULAR || []).map((num, i) => `
             <div class="queue-row"><h3>#${num} (REG)</h3><button class="serve-btn" onclick="serve('${dept}', 'REGULAR', ${i})">SERVE</button></div>`).join('');
         
-        document.getElementById(`list-${dept}-PRIORITY`).innerHTML = queues[dept].PRIORITY.map((num, i) => `
+        document.getElementById(`list-${dept}-PRIORITY`).innerHTML = (localQueues[dept].PRIORITY || []).map((num, i) => `
             <div class="queue-row"><h3>#${num} (PRI)</h3><button class="serve-btn" onclick="serve('${dept}', 'PRIORITY', ${i})">SERVE</button></div>`).join('');
 
-        const display = JSON.parse(localStorage.getItem('queue_display')) || {};
-        document.getElementById(`now-${dept}`).innerText = display[dept] ? `#${display[dept].num} (${display[dept].type})` : "NONE";
+        const d = window.currentDisplay || {};
+        document.getElementById(`now-${dept}`).innerText = d[dept] ? `#${d[dept].num} (${d[dept].type})` : "NONE";
 
-        // Render "Not Catered" history for THIS department specifically
-        const history = JSON.parse(localStorage.getItem('queue_history')) || [];
-        const deptHistory = history.filter(item => item.dept === dept);
-        document.getElementById(`history-list-${dept}`).innerHTML = deptHistory.map(item => `
-            <div class="history-row">
-                <span>#${item.num} (${item.type}) - Table ${item.table}</span>
-                <button class="serve-btn" style="background:#4a5568" onclick="markHistoryDone(${item.timestamp})">MARK DONE</button>
-            </div>
+        const h = window.currentHistory || [];
+        const deptH = h.filter(item => item.dept === dept);
+        document.getElementById(`history-list-${dept}`).innerHTML = deptH.map(item => `
+            <div class="history-row"><span>#${item.num} (${item.type})</span><button class="serve-btn" style="background:#4a5568" onclick="markHistoryDone(${item.timestamp})">DONE</button></div>
         `).join('') || '<div style="color:#a0aec0; font-size:12px">No pending no-shows.</div>';
     }
 
-    function resetQueue() { if(confirm("Reset all?")) { localStorage.clear(); location.reload(); } }
+    function resetQueue() { if(confirm("Reset all?")) db.ref('/').remove(); }
     init();
 </script>
 </body>
