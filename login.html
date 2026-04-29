@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PSA Admin Login</title>
+    <style>
+        :root {
+            --psa-blue: #1a4a7c;
+        }
+
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* Background Image with Blur */
+        .bg-image {
+            position: fixed;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            background-image: url('psabg.png');
+            background-size: cover;
+            background-position: center;
+            filter: blur(8px);
+            transform: scale(1.1); /* Prevents white edges from blur */
+            z-index: -1;
+        }
+
+        /* Login Card */
+        .login-card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            width: 350px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .logo {
+            width: 80px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: var(--psa-blue);
+            margin-bottom: 25px;
+            font-size: 22px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: var(--psa-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #123456;
+        }
+
+        .error {
+            color: #d94141;
+            font-size: 13px;
+            margin-top: 15px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-image"></div>
+
+    <div class="login-card">
+        <img src="PSALOGO.png" alt="Logo" class="logo">
+        <h2>Admin Login</h2>
+        
+        <div class="input-group">
+            <label>Username</label>
+            <input type="text" id="username" placeholder="Enter username">
+        </div>
+
+        <div class="input-group">
+            <label>Password</label>
+            <input type="password" id="password" placeholder="Enter password">
+        </div>
+
+        <button onclick="handleLogin()">LOGIN</button>
+        <p class="error" id="errorMsg">Invalid username or password.</p>
+    </div>
+
+    <script>
+        function handleLogin() {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            const error = document.getElementById('errorMsg');
+
+            // Your specific credentials
+            if (user === "NEGOCC-PHILSYS" && pass === "ADMIN-PHILSYS@2026") {
+                // Store login status for 24 hours
+                const expiry = new Date().getTime() + (24 * 60 * 60 * 1000);
+                localStorage.setItem('psa_admin_session', expiry);
+                
+                // Redirect to Admin page
+                window.location.href = "admin.html";
+            } else {
+                error.style.display = "block";
+            }
+        }
+
+        // Allow pressing "Enter" to login
+        document.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleLogin();
+        });
+    </script>
+</body>
+</html>
