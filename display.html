@@ -2,201 +2,80 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>PSA Public Queue Display</title>
+    <title>PSA Public Display - Cloud Sync</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <style>
-        :root {
-            --bg-dark: #243447;
-            --reg-red: #e53e3e;
-            --upd-yellow: #ecc94b;
-            --pri-blue: #4299e1;
-            --footer-bg: #1a2a3a;
-        }
-
-        body { 
-            background: var(--bg-dark); 
-            color: white; 
-            font-family: 'Segoe UI', Arial, sans-serif; 
-            margin: 0; 
-            height: 100vh; 
-            display: flex; 
-            flex-direction: column; 
-            overflow: hidden; 
-        }
-
-        /* Header Section */
-        header { 
-            padding: 20px 50px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 20px;
-        }
-        .logo { width: 100px; height: auto; }
-        .header-text { text-align: left; }
-        .header-text h1 { margin: 0; font-size: 32px; letter-spacing: 1px; font-weight: 800; }
-        .header-text p { margin: 0; font-size: 20px; font-weight: bold; text-align: center; }
-
-        /* Main Display Columns */
-        .main-container { 
-            flex: 1; 
-            display: flex; 
-            justify-content: space-around; 
-            align-items: center; 
-            padding: 0 20px;
-        }
-        .column { 
-            flex: 1; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            text-align: center;
-            border-right: 1px solid rgba(255,255,255,0.1);
-        }
+        :root { --bg-dark: #243447; --reg-red: #e53e3e; --upd-yellow: #ecc94b; --pri-blue: #4299e1; --footer-bg: #1a2a3a; }
+        body { background: var(--bg-dark); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        header { padding: 20px 50px; display: flex; align-items: center; justify-content: center; gap: 20px; }
+        .logo { width: 100px; }
+        .header-text h1 { margin: 0; font-size: 32px; font-weight: 800; }
+        .main-container { flex: 1; display: flex; justify-content: space-around; align-items: center; }
+        .column { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; border-right: 1px solid rgba(255,255,255,0.1); }
         .column:last-child { border-right: none; }
-
-        .dept-title { font-size: 2.2rem; font-weight: bold; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 2px; }
-        .serving-label { font-size: 1.4rem; color: #cbd5e0; font-weight: bold; margin-bottom: 10px; }
-        
-        /* The Big Numbers */
+        .dept-title { font-size: 2.2rem; font-weight: bold; margin-bottom: 30px; text-transform: uppercase; }
         .number { font-size: 9rem; font-weight: 900; margin: 10px 0; line-height: 1; }
-        .status-label { font-size: 1.5rem; font-weight: bold; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; }
-        .table-info { font-style: italic; font-size: 1.1rem; color: #cbd5e0; letter-spacing: 1px; }
-
-        /* Column Specific Colors */
+        .status-label { font-size: 1.5rem; font-weight: bold; margin-bottom: 20px; text-transform: uppercase; }
         .reg-col .dept-title, .reg-col .number { color: var(--reg-red); }
         .upd-col .dept-title, .upd-col .number { color: var(--upd-yellow); }
         .pri-col .dept-title, .pri-col .number { color: var(--pri-blue); }
-
-        /* Footer / History Bar */
-        .footer-bar { 
-            background: var(--footer-bg); 
-            height: 100px; 
-            display: flex; 
-            align-items: center; 
-            padding: 0 40px; 
-            border-top: 1px solid #334e68;
-        }
-        .history-title { 
-            font-size: 0.8rem; 
-            color: #888; 
-            text-transform: uppercase; 
-            border-right: 1px solid #444; 
-            padding-right: 20px; 
-            margin-right: 20px;
-            text-align: left;
-            line-height: 1.2;
-        }
+        .footer-bar { background: var(--footer-bg); height: 100px; display: flex; align-items: center; padding: 0 40px; border-top: 1px solid #334e68; }
         .history-list { display: flex; gap: 15px; }
-        .history-item { 
-            background: rgba(255,255,255,0.1); 
-            padding: 8px 15px; 
-            border-radius: 6px; 
-            font-size: 0.9rem; 
-            border-left: 4px solid #fff; 
-            animation: slideIn 0.5s ease-out;
-        }
-        .history-item b { font-size: 1rem; }
-
-        /* Animations */
+        .history-item { background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 6px; border-left: 4px solid #fff; animation: slideIn 0.5s; }
         .flash { animation: highlight 1s ease-in-out 3; }
         @keyframes highlight { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
-        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; } }
     </style>
 </head>
 <body>
-
     <header>
-        <img src="PSALOGO.png" alt="PSA Logo" class="logo">
-        <div class="header-text">
-            <h1>PHILIPPINE STATISTICS AUTHORITY</h1>
-            <p>NEGROS OCCIDENTAL</p>
-        </div>
+        <img src="PSALOGO.png" alt="" class="logo">
+        <div class="header-text"><h1>PHILIPPINE STATISTICS AUTHORITY</h1><h1>NEGROS OCCIDENTAL</h1></div>
     </header>
-
     <div class="main-container">
-        <div class="column reg-col">
-            <div class="dept-title">REGISTRATION</div>
-            <div class="serving-label">NOW SERVING</div>
-            <div id="num-REGISTRATION" class="number">---</div>
-            <div id="type-REGISTRATION" class="status-label">VACANT</div>
-            <div class="table-info">PLEASE PROCEED TO TABLE # <span id="table-REGISTRATION">0</span></div>
-        </div>
-
-        <div class="column upd-col">
-            <div class="dept-title">UPDATING</div>
-            <div class="serving-label">NOW SERVING</div>
-            <div id="num-UPDATING" class="number">---</div>
-            <div id="type-UPDATING" class="status-label">VACANT</div>
-            <div class="table-info">PLEASE PROCEED TO TABLE # <span id="table-UPDATING">0</span></div>
-        </div>
-
-        <div class="column pri-col">
-            <div class="dept-title">PRINTING</div>
-            <div class="serving-label">NOW SERVING</div>
-            <div id="num-PRINTING" class="number">---</div>
-            <div id="type-PRINTING" class="status-label">VACANT</div>
-            <div class="table-info">PLEASE PROCEED TO TABLE # <span id="table-PRINTING">0</span></div>
-        </div>
+        <div class="column reg-col"><div class="dept-title">REGISTRATION</div><div id="num-REGISTRATION" class="number">---</div><div id="type-REGISTRATION" class="status-label">VACANT</div><div>TABLE # <span id="table-REGISTRATION">0</span></div></div>
+        <div class="column upd-col"><div class="dept-title">UPDATING</div><div id="num-UPDATING" class="number">---</div><div id="type-UPDATING" class="status-label">VACANT</div><div>TABLE # <span id="table-UPDATING">0</span></div></div>
+        <div class="column pri-col"><div class="dept-title">PRINTING</div><div id="num-PRINTING" class="number">---</div><div id="type-PRINTING" class="status-label">VACANT</div><div>TABLE # <span id="table-PRINTING">0</span></div></div>
     </div>
-
-    <div class="footer-bar">
-        <div class="history-title">PREVIOUS CALLS<br>(WAITING/NO-SHOW)</div>
-        <div id="historyList" class="history-list"></div>
-    </div>
-
+    <div class="footer-bar"><div id="historyList" class="history-list"></div></div>
     <audio id="ding" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"></audio>
 
-    <script>
-        function updateDisplay() {
-            const data = JSON.parse(localStorage.getItem('queue_display')) || {};
-            const history = JSON.parse(localStorage.getItem('queue_history')) || [];
-            const depts = ['REGISTRATION', 'UPDATING', 'PRINTING'];
-            
-            depts.forEach(dept => {
-                const numEl = document.getElementById(`num-${dept}`);
-                const typeEl = document.getElementById(`type-${dept}`);
-                const tableEl = document.getElementById(`table-${dept}`);
+<script>
+    const firebaseConfig = { databaseURL: "https://psa-queue-default-rtdb.asia-southeast1.firebasedatabase.app/" };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 
-                if (data[dept]) {
-                    const newNum = "#" + data[dept].num;
-                    if (numEl.innerText !== newNum) {
-                        numEl.innerText = newNum;
-                        typeEl.innerText = data[dept].type;
-                        tableEl.innerText = data[dept].table;
-                        
-                        // Alert sound
-                        const audio = document.getElementById('ding');
-                        audio.currentTime = 0;
-                        audio.play().catch(e => console.log("Audio play blocked."));
-                        
-                        // Visual notification
-                        numEl.classList.remove('flash');
-                        void numEl.offsetWidth; 
-                        numEl.classList.add('flash');
-                    }
-                } else {
-                    numEl.innerText = "---";
-                    typeEl.innerText = "VACANT";
-                    tableEl.innerText = "0";
+    db.ref('/').on('value', (snapshot) => {
+        const data = snapshot.val() || {};
+        const display = data.queue_display || {};
+        const history = data.queue_history || [];
+        const depts = ['REGISTRATION', 'UPDATING', 'PRINTING'];
+
+        depts.forEach(dept => {
+            const numEl = document.getElementById(`num-${dept}`);
+            const typeEl = document.getElementById(`type-${dept}`);
+            const tableEl = document.getElementById(`table-${dept}`);
+
+            if (display[dept]) {
+                const newNum = "#" + display[dept].num;
+                if (numEl.innerText !== newNum) {
+                    numEl.innerText = newNum;
+                    typeEl.innerText = display[dept].type;
+                    tableEl.innerText = display[dept].table;
+                    document.getElementById('ding').play().catch(() => {});
+                    numEl.classList.remove('flash'); void numEl.offsetWidth; numEl.classList.add('flash');
                 }
-            });
+            } else {
+                numEl.innerText = "---"; typeEl.innerText = "VACANT"; tableEl.innerText = "0";
+            }
+        });
 
-            // Update History List (Bottom Left)
-            const histListEl = document.getElementById('historyList');
-            histListEl.innerHTML = history.slice(0, 4).map(item => `
-                <div class="history-item" style="border-left-color: ${
-                    item.dept === 'REGISTRATION' ? 'var(--reg-red)' : 
-                    item.dept === 'UPDATING' ? 'var(--upd-yellow)' : 'var(--pri-blue)'
-                }">
-                    <b>Ticket #${item.num}</b> <small>(${item.dept})</small><br>
-                    <small>Table #${item.table}</small>
-                </div>
-            `).join('');
-        }
-
-        window.addEventListener('storage', updateDisplay);
-        setInterval(updateDisplay, 1000); 
-        updateDisplay();
-    </script>
+        document.getElementById('historyList').innerHTML = history.slice(0, 4).map(item => `
+            <div class="history-item" style="border-left-color: ${item.dept==='REGISTRATION'?'#e53e3e':item.dept==='UPDATING'?'#ecc94b':'#4299e1'}">
+                <b>#${item.num}</b> <small>(${item.dept})</small><br><small>Table #${item.table}</small>
+            </div>`).join('');
+    });
+</script>
 </body>
 </html>
