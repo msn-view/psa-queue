@@ -10,21 +10,6 @@
         :root { --psa-blue: #1a4a7c; --psa-light-blue: #3e6d9c; --psa-bg: #808080; --accent-teal: #17a2b8; --panel-bg: #d1d9e2; --history-bg: #e2e8f0; }
         
         body, html { height: 100%; margin: 0; font-family: 'Segoe UI', sans-serif; }
-
-        /* ADDED BACKGROUND IMAGE FOR ADMIN */
-        .bg-image {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('psabg.png');
-            background-size: cover;
-            background-position: center;
-            filter: blur(5px);
-            transform: scale(1.1);
-            z-index: -1;
-        }
         header { padding: 15px; display: flex; align-items: center; justify-content: center; color: white; }
         .logo { width: 70px; margin-right: 15px; }
         .header-text h1 { margin: 0; font-size: 24px; }
@@ -34,15 +19,7 @@
         .tabs-container { display: flex; justify-content: center; gap: 15px; margin: 15px 0; }
         .tab-link { background: white; color: var(--psa-blue); border: none; padding: 8px 30px; border-radius: 20px; font-weight: bold; cursor: pointer; transition: 0.3s; }
         .tab-link.active { background: var(--psa-light-blue); color: white; }
-        .main-card { 
-            position: relative;
-            background: rgba(253, 253, 253, 0.95); /* Slightly transparent to see bg */
-            width: 950px; 
-            margin: 0 auto 40px; 
-            border-radius: 20px; 
-            padding: 25px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
-        }
+         .main-card { background: #fdfdfd; width: 950px; margin: 0 auto 40px; border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         .dept-title { text-align: center; color: var(--psa-blue); font-size: 28px; border-bottom: 2px solid #ccc; padding-bottom: 10px; margin-bottom: 15px; text-transform: uppercase; }
         .serving-box { background: var(--panel-bg); border-radius: 15px; padding: 15px; text-align: center; margin-bottom: 15px; }
         .serving-box h2 { color: var(--psa-blue); margin: 5px 0; font-size: 28px; font-weight: 800; }
@@ -64,7 +41,7 @@
     </style>
 </head>
 <body>
-    <div class="bg-image"></div>
+    
     <header>
         <img src="PSALOGO.png" alt="" class="logo">
         <div class="header-text">
