@@ -27,14 +27,14 @@
         }
 
         header { 
-            padding: 20px 0; /* Reduced padding to accommodate notice bar */
+            padding: 20px 0; 
             display: flex; 
             justify-content: center; 
             align-items: center; 
             gap: 30px;
             background: rgba(0,0,0,0.2);
         }
-        .logo { width: 100px; height: auto; } /* Adjusted size slightly */
+        .logo { width: 100px; height: auto; } 
         .header-text h1 { margin: 0; font-size: 38px; font-weight: 900; letter-spacing: 2px; }
         .header-text h2 { margin: 0; font-size: 28px; font-weight: 700; letter-spacing: 1px; color: #f8fafc; text-align: center; }
 
@@ -93,12 +93,37 @@
         .reg-col .dept-title, .reg-col .number { color: var(--reg-red); }
         .upd-col .dept-title, .upd-col .number { color: var(--upd-yellow); }
 
+        /* FOOTER ANIMATION STYLES */
         .footer-bar { background: var(--footer-bg); height: 120px; display: flex; align-items: center; padding: 0 50px; border-top: 3px solid #334155; }
         .history-label { font-size: 1rem; color: #64748b; font-weight: 800; text-transform: uppercase; border-right: 3px solid #334155; padding-right: 30px; margin-right: 30px; white-space: nowrap; line-height: 1.2; }
         .history-list { display: flex; gap: 25px; flex: 1; }
+        
         .history-card { 
-            background: #1e293b; padding: 12px 20px; border-radius: 12px; min-width: 250px; position: relative; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.3); animation: popIn 0.5s ease-out;
+            background: #1e293b; 
+            padding: 12px 20px; 
+            border-radius: 12px; 
+            min-width: 220px; 
+            max-width: 220px;
+            position: relative; 
+            overflow: hidden; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3); 
+            animation: slideInBottom 0.5s ease-out forwards;
         }
+
+        @keyframes slideInBottom {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-out-footer {
+            animation: fadeOutExit 0.5s ease-in forwards;
+        }
+
+        @keyframes fadeOutExit {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(0.9); }
+        }
+
         .history-card b { font-size: 1.3rem; color: white; }
         .history-card span.type { font-size: 1rem; font-weight: 800; color: white; }
         .history-card span.dept { font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; font-weight: 800; display: block; letter-spacing: 1px; }
@@ -118,7 +143,6 @@
         </div>
     </header>
 
-    <!-- NEW NOTICE BAR -->
     <div class="notice-bar">
         <div class="notice-content">
             <span class="notice-text">
@@ -133,7 +157,6 @@
     </div>
 
     <div class="main-container">
-        <!-- REGISTRATION -->
         <div class="column reg-col">
             <div class="dept-title">REGISTRATION</div>
             <div class="now-serving">NOW SERVING</div>
@@ -142,7 +165,6 @@
             <div class="proceed-text">PLEASE PROCEED TO TABLE # <span id="table-REGISTRATION" class="table-num">0</span></div>
         </div>
 
-        <!-- UPDATING -->
         <div class="column upd-col">
             <div class="dept-title">UPDATING</div>
             <div class="now-serving">NOW SERVING</div>
@@ -164,10 +186,49 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
+    // VARIABLES FOR FOOTER ANIMATION
+    let historyPageIndex = 0;
+    const CARDS_PER_PAGE = 5;
+    let latestHistoryData = [];
+
+    function updateFooter(history) {
+        const histListEl = document.getElementById('historyList');
+        if (!histListEl) return;
+
+        const totalItems = history.length;
+        if (totalItems === 0) {
+            histListEl.innerHTML = '<div style="color: #475569; font-style: italic;">No pending calls.</div>';
+            return;
+        }
+
+        // Logic to cycle pages
+        const start = historyPageIndex * CARDS_PER_PAGE;
+        if (start >= totalItems) {
+            historyPageIndex = 0;
+        }
+        
+        const pageItems = history.slice(historyPageIndex * CARDS_PER_PAGE, (historyPageIndex + 1) * CARDS_PER_PAGE);
+
+        histListEl.innerHTML = pageItems.map(item => `
+            <div class="history-card" style="border-left: 6px solid ${item.dept === 'REGISTRATION' ? 'var(--reg-red)' : 'var(--upd-yellow)'}">
+                <span class="dept">${item.dept}</span>
+                <div style="display: flex; align-items: baseline; gap: 10px; margin-top: 2px;">
+                    <b style="font-size: 1.3rem; color: white;">Ticket #${item.num}</b>
+                    <span class="type" style="font-size: 1rem; font-weight: 800; color: white;">(${item.type})</span>
+                </div>
+                <div style="font-size: 0.9rem; color: #cbd5e1; margin-top: 2px; font-weight: bold;">
+                    Table #${item.table}
+                </div>
+            </div>
+        `).join('');
+
+        historyPageIndex++;
+    }
+
     db.ref('/').on('value', (snapshot) => {
         const data = snapshot.val() || {};
         const display = data.queue_display || {};
-        const history = data.queue_history || [];
+        latestHistoryData = data.queue_history || []; 
         const depts = ['REGISTRATION', 'UPDATING'];
 
         depts.forEach(dept => {
@@ -193,20 +254,21 @@
             }
         });
 
-        const histListEl = document.getElementById('historyList');
-        histListEl.innerHTML = history.slice(0, 4).map(item => `
-            <div class="history-card" style="border-left: 6px solid ${item.dept === 'REGISTRATION' ? 'var(--reg-red)' : 'var(--upd-yellow)'}">
-                <span class="dept">${item.dept}</span>
-                <div style="display: flex; align-items: baseline; gap: 10px; margin-top: 2px;">
-                    <b>Ticket #${item.num}</b>
-                    <span class="type">(${item.type})</span>
-                </div>
-                <div style="font-size: 0.9rem; color: #cbd5e1; margin-top: 2px; font-weight: bold;">
-                    Table #${item.table}
-                </div>
-            </div>
-        `).join('');
+        // Initial footer render when data arrives
+        updateFooter(latestHistoryData);
     });
+
+    // SET INTERVAL TO CYCLE FOOTER EVERY 8 SECONDS
+    setInterval(() => {
+        if (latestHistoryData.length > CARDS_PER_PAGE) {
+            const cards = document.querySelectorAll('.history-card');
+            cards.forEach(c => c.classList.add('fade-out-footer'));
+
+            setTimeout(() => {
+                updateFooter(latestHistoryData);
+            }, 500);
+        }
+    }, 8000);
 </script>
 </body>
 </html>
