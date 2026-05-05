@@ -11,6 +11,7 @@
             --bg-dark: #0f172a; 
             --reg-red: #ff4d4d; 
             --upd-yellow: #f1c40f; 
+            --pri-blue: #3498db; 
             --footer-bg: #0b0f1a;
             --card-bg: #1e293b;
         }
@@ -22,82 +23,86 @@
             color: white; 
             font-family: 'Segoe UI', Roboto, sans-serif; 
             margin: 0; 
-            min-height: 100vh; 
+            height: 100vh; 
+            width: 100vw;
             display: flex; 
             flex-direction: column; 
-            overflow-x: hidden;
+            overflow: hidden; 
         }
 
-        /* HEADER */
         header { 
-            padding: 15px;
+            height: 12vh;
             display: flex; 
             justify-content: center; 
             align-items: center; 
-            gap: 15px;
+            gap: 2vw;
             background: rgba(0,0,0,0.2);
-            flex-shrink: 0;
+            padding: 1vh 0;
         }
-        .logo { height: clamp(40px, 8vh, 80px); width: auto; } 
-        .header-text h1 { margin: 0; font-size: clamp(16px, 4vw, 32px); font-weight: 900; }
-        .header-text h2 { margin: 0; font-size: clamp(12px, 3vw, 20px); text-align: center; opacity: 0.9; }
+        .logo { height: 8vh; width: auto; } 
+        .header-text h1 { margin: 0; font-size: 3.5vh; font-weight: 900; letter-spacing: 2px; }
+        .header-text h2 { margin: 0; font-size: 2.5vh; font-weight: 700; letter-spacing: 1px; color: #f8fafc; text-align: center; }
 
-        /* NOTICE MARQUEE */
+        /* NOTICE BAR */
         .notice-bar {
             background: #000;
             white-space: nowrap;
             overflow: hidden;
-            padding: 10px 0;
+            height: 6vh;
+            display: flex;
+            align-items: center;
             border-top: 1px solid rgba(255,255,255,0.1);
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
+
         .notice-content {
             display: inline-block;
             padding-left: 100%;
             animation: marquee 25s linear infinite;
-            font-size: clamp(1.2rem, 3vh, 2rem);
+            font-size: 3vh;
             font-weight: 900;
             text-transform: uppercase;
         }
+
+        .notice-text { display: inline-flex; gap: 5vw; }
+        .notice-red { color: #ff3e3e; text-shadow: 0 0 10px rgba(255, 62, 62, 0.5); }
+        .notice-white { color: #ffffff; }
+
         @keyframes marquee {
             0% { transform: translate(0, 0); }
             100% { transform: translate(-100%, 0); }
         }
 
-        /* MAIN DISPLAY - Responsive Grid */
+        /* MAIN DISPLAY AREA */
         .main-container { 
             flex: 1; 
             display: flex; 
-            flex-wrap: wrap; /* Key for Mobile Responsiveness */
             width: 100%;
         }
         .column { 
-            flex: 1 1 350px; /* Bases to 350px then grows, stacks if smaller */
+            flex: 1; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
             justify-content: center;
             text-align: center;
-            padding: 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-right: 2px solid rgba(255,255,255,0.05);
+            padding: 2vh;
         }
-        @media (min-width: 769px) {
-            .column:first-child { border-right: 1px solid rgba(255,255,255,0.1); }
-            body { overflow: hidden; } /* Lock screen on TVs */
-        }
+        .column:last-child { border-right: none; }
 
-        .dept-title { font-size: clamp(2rem, 6vh, 4rem); font-weight: 800; margin-bottom: 5px; }
-        .now-serving { font-size: 1.2rem; color: #94a3b8; font-weight: bold; }
+        .dept-title { font-size: 6vh; font-weight: 800; margin-bottom: 2vh; letter-spacing: 3px; }
+        .now-serving { font-size: 2.5vh; font-weight: 600; color: #94a3b8; }
         .number { 
-            font-size: clamp(6rem, 20vh, 14rem); 
+            font-size: 22vh; 
             font-weight: 900; 
+            margin: 1vh 0; 
             line-height: 1; 
-            margin: 10px 0;
-            text-shadow: 0 10px 20px rgba(0,0,0,0.5); 
+            text-shadow: 0 1vh 2vh rgba(0,0,0,0.5); 
         }
-        .status-label { font-size: clamp(1.5rem, 4vh, 2.5rem); font-weight: 800; }
-        .proceed-text { font-size: 1.1rem; color: #cbd5e1; margin-top: 10px; }
-        .table-num { font-weight: 900; font-size: 1.4rem; color: white; }
+        .status-label { font-size: 4vh; font-weight: 800; margin: 2vh 0; }
+        .proceed-text { font-size: 2.5vh; font-weight: 400; color: #cbd5e1; }
+        .table-num { font-weight: 900; font-size: 3vh; color: white; }
 
         .reg-col .dept-title, .reg-col .number { color: var(--reg-red); }
         .upd-col .dept-title, .upd-col .number { color: var(--upd-yellow); }
@@ -105,47 +110,64 @@
         /* FOOTER */
         .footer-bar { 
             background: var(--footer-bg); 
-            padding: 15px 20px; 
-            border-top: 3px solid #334155;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-            gap: 15px;
+            height: 18vh; 
+            display: flex; 
+            align-items: center; 
+            padding: 0 2vw; 
+            border-top: 3px solid #334155; 
         }
+
         .history-label { 
-            font-size: 0.9rem; color: #64748b; font-weight: 800; 
-            text-transform: uppercase; border-right: 2px solid #334155; 
-            padding-right: 15px;
+            font-size: 1.8vh; color: #64748b; font-weight: 800; 
+            text-transform: uppercase; border-right: 3px solid #334155; 
+            padding-right: 2vw; margin-right: 2vw; white-space: nowrap; line-height: 1.2; 
         }
-        .history-list { display: flex; gap: 15px; flex: 1; overflow: hidden; }
+        
+        .history-list { display: flex; gap: 1.5vw; flex: 1; overflow: hidden; }
 
         .history-card { 
-            background: var(--card-bg); 
-            padding: 10px; 
-            border-radius: 8px; 
-            flex: 0 0 clamp(160px, 15vw, 220px);
+            background: #1e293b; 
+            padding: 1.5vh 1.5vw; 
+            border-radius: 12px; 
+            flex: 0 0 15vw;
+            height: 12vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative; 
             box-shadow: 0 4px 6px rgba(0,0,0,0.3); 
-            animation: slideIn 0.5s ease-out;
+            animation: slideInBottom 0.5s ease-out forwards;
         }
-        .history-card b { font-size: 1.2rem; }
-        .history-card span.dept { font-size: 0.7rem; color: #94a3b8; display: block; text-transform: uppercase; }
+
+        @keyframes slideInBottom {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-out-footer { animation: fadeOutExit 0.5s ease-in forwards; }
+        @keyframes fadeOutExit {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(0.9); }
+        }
+
+        .history-card b { font-size: 2.5vh; color: white; }
+        .history-card span.type { font-size: 1.8vh; font-weight: 800; color: white; }
+        .history-card span.dept { font-size: 1.4vh; color: #94a3b8; text-transform: uppercase; font-weight: 800; display: block; letter-spacing: 1px; }
 
         /* QR SECTION */
         .qr-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            border-left: 2px solid #334155;
-            padding-left: 15px;
+            justify-content: center;
+            padding-left: 2vw;
+            border-left: 3px solid #334155;
+            margin-left: 1vw;
+            height: 100%;
         }
-        .qr-image { height: 70px; width: 70px; background: white; padding: 3px; border-radius: 4px; }
-        .qr-subtext { font-size: 0.6rem; margin-top: 3px; text-align: center; font-weight: bold; }
-
-        @media (max-width: 600px) {
-            .footer-bar { flex-direction: column; text-align: center; }
-            .history-label, .qr-container { border: none; padding: 0; }
-        }
+        .qr-label { font-size: 1.5vh; font-weight: 900; color: #ffffff; text-transform: uppercase; margin-bottom: 0.5vh; }
+        .qr-image { height: 10vh; width: auto; background: white; padding: 4px; border-radius: 5px; }
+        .qr-subtext { font-size: 1.2vh; font-weight: 800; color: #ffffff; text-align: center; text-transform: uppercase; margin-top: 0.5vh; line-height: 1.1; }
 
         .flash { animation: highlight 0.8s ease-in-out 3; }
         @keyframes highlight { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
@@ -163,8 +185,11 @@
 
     <div class="notice-bar">
         <div class="notice-content">
-            <span class="notice-red">NOTICE:</span> ONE NUMBER, ONE TRANSACTION &nbsp;&nbsp;&nbsp; 
-            <span class="notice-red">NOTICE:</span> ONE NUMBER, ONE TRANSACTION
+            <span class="notice-text">
+                <span class="notice-red">NOTICE:</span> <span class="notice-white">ONE NUMBER, ONE TRANSACTION</span>
+                <span class="notice-red" style="margin-left: 100px;">NOTICE:</span> <span class="notice-white">ONE NUMBER, ONE TRANSACTION</span>
+                <span class="notice-red" style="margin-left: 100px;">NOTICE:</span> <span class="notice-white">ONE NUMBER, ONE TRANSACTION</span>
+            </span>
         </div>
     </div>
 
@@ -174,7 +199,7 @@
             <div class="now-serving">NOW SERVING</div>
             <div id="num-REGISTRATION" class="number">---</div>
             <div id="type-REGISTRATION" class="status-label">VACANT</div>
-            <div class="proceed-text">PROCEED TO TABLE # <span id="table-REGISTRATION" class="table-num">0</span></div>
+            <div class="proceed-text">PLEASE PROCEED TO TABLE # <span id="table-REGISTRATION" class="table-num">0</span></div>
         </div>
 
         <div class="column upd-col">
@@ -182,24 +207,23 @@
             <div class="now-serving">NOW SERVING</div>
             <div id="num-UPDATING" class="number">---</div>
             <div id="type-UPDATING" class="status-label">VACANT</div>
-            <div class="proceed-text">PROCEED TO TABLE # <span id="table-UPDATING" class="table-num">0</span></div>
+            <div class="proceed-text">PLEASE PROCEED TO TABLE # <span id="table-UPDATING" class="table-num">0</span></div>
         </div>
     </div>
 
     <div class="footer-bar">
-        <div class="history-label">PREVIOUSLY<br>CALLED</div>
+        <div class="history-label">PREVIOUSLY CALLED<br>(WAITING/NO-SHOW)</div>
         <div id="historyList" class="history-list"></div>
         <div class="qr-container">
-            <div style="font-size: 0.7rem; margin-bottom: 2px;">SCAN TO VIEW:</div>
-            <img src="qrdisplay.png" alt="QR" class="qr-image">
-            <div class="qr-subtext">LIVE MOBILE DISPLAY</div>
+            <div class="qr-label">SCAN TO:</div>
+            <img src="qrdisplay.png" alt="QR Code" class="qr-image">
+            <div class="qr-subtext">VIEW LIVE<br>MOBILE DISPLAY</div>
         </div>
     </div>
 
     <audio id="ding" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
 
 <script>
-    // --- FIREBASE SYNC (CONNECTS TO YOUR EXISTING admin.html) ---
     const firebaseConfig = { databaseURL: "https://psa-queue-default-rtdb.asia-southeast1.firebasedatabase.app/" };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
@@ -213,16 +237,20 @@
         if (!histListEl) return;
         const totalItems = history.length;
         if (totalItems === 0) {
-            histListEl.innerHTML = '<div style="opacity:0.5">No calls yet.</div>';
+            histListEl.innerHTML = '<div style="color: #475569; font-style: italic;">No pending calls.</div>';
             return;
         }
         const start = historyPageIndex * CARDS_PER_PAGE;
         if (start >= totalItems) historyPageIndex = 0;
         const pageItems = history.slice(historyPageIndex * CARDS_PER_PAGE, (historyPageIndex + 1) * CARDS_PER_PAGE);
         histListEl.innerHTML = pageItems.map(item => `
-            <div class="history-card" style="border-left: 5px solid ${item.dept === 'REGISTRATION' ? 'var(--reg-red)' : 'var(--upd-yellow)'}">
+            <div class="history-card" style="border-left: 6px solid ${item.dept === 'REGISTRATION' ? 'var(--reg-red)' : 'var(--upd-yellow)'}">
                 <span class="dept">${item.dept}</span>
-                <b>#${item.num}</b> <small>(${item.type})</small>
+                <div style="display: flex; align-items: baseline; gap: 0.5vw; margin-top: 0.5vh;">
+                    <b>Ticket #${item.num}</b>
+                    <span class="type">(${item.type})</span>
+                </div>
+                <div style="font-size: 1.6vh; color: #cbd5e1; margin-top: 0.5vh; font-weight: bold;">Table #${item.table}</div>
             </div>
         `).join('');
         historyPageIndex++;
@@ -246,10 +274,10 @@
                     typeEl.innerText = display[dept].type;
                     tableEl.innerText = display[dept].table;
                     
-                    // Sound Play
+                    // Trigger sound
                     const audio = document.getElementById('ding');
                     audio.currentTime = 0;
-                    audio.play().catch(() => console.log("Click screen once for sound"));
+                    audio.play().catch(e => console.log("Sound blocked. Click page once to enable."));
                     
                     numEl.classList.remove('flash');
                     void numEl.offsetWidth;
@@ -266,7 +294,9 @@
 
     setInterval(() => {
         if (latestHistoryData.length > CARDS_PER_PAGE) {
-            updateFooter(latestHistoryData);
+            const cards = document.querySelectorAll('.history-card');
+            cards.forEach(c => c.classList.add('fade-out-footer'));
+            setTimeout(() => updateFooter(latestHistoryData), 500);
         }
     }, 8000);
 </script>
