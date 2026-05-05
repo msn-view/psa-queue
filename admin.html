@@ -73,7 +73,6 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // REMOVED PRINTING FROM HERE
     const depts = ['REGISTRATION', 'UPDATING'];
     let localQueues = { REGISTRATION: { REGULAR: [], PRIORITY: [] }, UPDATING: { REGULAR: [], PRIORITY: [] } };
     let isInitialized = false;
@@ -121,9 +120,10 @@
         window.currentDisplay = data.queue_display || {};
         localQueues = data.queues || { REGISTRATION: { REGULAR: [], PRIORITY: [] }, UPDATING: { REGULAR: [], PRIORITY: [] } };
         
+        // Ensure data integrity for all departments
         depts.forEach(d => {
             if (!localQueues[d]) localQueues[d] = { REGULAR: [], PRIORITY: [] };
-            depts.forEach(d => render(d));
+            render(d); // Render each department once
         });
     });
 
@@ -137,9 +137,13 @@
     function addTicket(dept, type) {
         if (!window.currentCounters || !window.currentCounters[dept]) return;
         const nextNum = window.currentCounters[dept][type];
+        
+        if (!localQueues[dept]) localQueues[dept] = { REGULAR: [], PRIORITY: [] };
         if (!localQueues[dept][type]) localQueues[dept][type] = [];
+        
         localQueues[dept][type].push(nextNum);
         window.currentCounters[dept][type]++;
+        
         db.ref('/').update({ queues: localQueues, counters: window.currentCounters });
     }
 
@@ -157,6 +161,7 @@
                 dept: dept,
                 timestamp: Date.now()
             });
+            if (history.length > 10) history.pop();
         }
 
         display[dept] = { num: ticketNum, type: type, table: table };
