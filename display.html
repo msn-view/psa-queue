@@ -26,7 +26,6 @@
             overflow: hidden; 
         }
 
-        /* Header Section */
         header { 
             padding: 40px 0; 
             display: flex; 
@@ -36,27 +35,10 @@
             background: rgba(0,0,0,0.2);
         }
         .logo { width: 130px; height: auto; }
-        .header-text h1 { 
-            margin: 0; 
-            font-size: 48px; 
-            font-weight: 900; 
-            letter-spacing: 2px; 
-        }
-        .header-text h2 { 
-            margin: 0; 
-            font-size: 36px; 
-            font-weight: 700; 
-            letter-spacing: 1px;
-            color: #f8fafc;
-            text-align: center;
-        }
+        .header-text h1 { margin: 0; font-size: 48px; font-weight: 900; letter-spacing: 2px; }
+        .header-text h2 { margin: 0; font-size: 36px; font-weight: 700; letter-spacing: 1px; color: #f8fafc; text-align: center; }
 
-        /* Main Columns */
-        .main-container { 
-            flex: 1; 
-            display: flex; 
-            padding: 20px 0 60px 0;
-        }
+        .main-container { flex: 1; display: flex; padding: 20px 0 60px 0; }
         .column { 
             flex: 1; 
             display: flex; 
@@ -68,61 +50,26 @@
         }
         .column:last-child { border-right: none; }
 
-        .dept-title { font-size: 3rem; font-weight: 800; margin-bottom: 40px; letter-spacing: 3px; }
-        .now-serving { font-size: 1.8rem; font-weight: 600; color: #94a3b8; margin-bottom: 10px; }
-        
-        /* The Big Numbers */
-        .number { 
-            font-size: 14rem; 
-            font-weight: 900; 
-            margin: -10px 0; 
-            line-height: 1; 
-            text-shadow: 0 15px 30px rgba(0,0,0,0.5); 
-        }
-        
-        .status-label { font-size: 2rem; font-weight: 800; margin: 30px 0 10px 0; }
-        .proceed-text { font-size: 1.4rem; font-weight: 400; color: #cbd5e1; }
-        .table-num { font-weight: 900; font-size: 1.8rem; color: white; }
+        .dept-title { font-size: 4rem; font-weight: 800; margin-bottom: 40px; letter-spacing: 3px; }
+        .now-serving { font-size: 2.2rem; font-weight: 600; color: #94a3b8; margin-bottom: 10px; }
+        .number { font-size: 16rem; font-weight: 900; margin: -10px 0; line-height: 1; text-shadow: 0 15px 30px rgba(0,0,0,0.5); }
+        .status-label { font-size: 2.5rem; font-weight: 800; margin: 30px 0 10px 0; }
+        .proceed-text { font-size: 1.8rem; font-weight: 400; color: #cbd5e1; }
+        .table-num { font-weight: 900; font-size: 2.2rem; color: white; }
 
-        /* Colors based on image */
         .reg-col .dept-title, .reg-col .number { color: var(--reg-red); }
         .upd-col .dept-title, .upd-col .number { color: var(--upd-yellow); }
-        .pri-col .dept-title, .pri-col .number { color: var(--pri-blue); }
 
-        /* Footer - Previous Calls */
-        .footer-bar { 
-            background: var(--footer-bg); 
-            height: 140px; 
-            display: flex; 
-            align-items: center; 
-            padding: 0 50px; 
-            border-top: 3px solid #334155;
-        }
-        .history-label { 
-            font-size: 1.1rem; 
-            color: #64748b; 
-            font-weight: 800;
-            text-transform: uppercase; 
-            border-right: 3px solid #334155; 
-            padding-right: 30px; 
-            margin-right: 30px;
-            white-space: nowrap;
-            line-height: 1.2;
-        }
+        .footer-bar { background: var(--footer-bg); height: 140px; display: flex; align-items: center; padding: 0 50px; border-top: 3px solid #334155; }
+        .history-label { font-size: 1.1rem; color: #64748b; font-weight: 800; text-transform: uppercase; border-right: 3px solid #334155; padding-right: 30px; margin-right: 30px; white-space: nowrap; line-height: 1.2; }
         .history-list { display: flex; gap: 25px; flex: 1; }
         .history-card { 
-            background: var(--card-bg); 
-            padding: 15px 25px; 
-            border-radius: 12px; 
-            min-width: 220px;
-            border-left: 8px solid #fff;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: #1e293b; padding: 12px 20px; border-radius: 12px; min-width: 250px; position: relative; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.3); animation: popIn 0.5s ease-out;
         }
-        .history-card b { font-size: 1.4rem; display: block; margin-bottom: 2px; }
-        .history-card span { font-size: 0.9rem; color: #94a3b8; font-weight: bold; text-transform: uppercase; }
+        .history-card b { font-size: 1.5rem; color: white; }
+        .history-card span.type { font-size: 1.1rem; font-weight: 800; color: white; }
+        .history-card span.dept { font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; font-weight: 800; display: block; letter-spacing: 1px; }
 
-        /* Animations */
         @keyframes popIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
         .flash { animation: highlight 0.8s ease-in-out 3; }
         @keyframes highlight { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
@@ -139,6 +86,7 @@
     </header>
 
     <div class="main-container">
+        <!-- REGISTRATION -->
         <div class="column reg-col">
             <div class="dept-title">REGISTRATION</div>
             <div class="now-serving">NOW SERVING</div>
@@ -147,6 +95,7 @@
             <div class="proceed-text">PLEASE PROCEED TO TABLE # <span id="table-REGISTRATION" class="table-num">0</span></div>
         </div>
 
+        <!-- UPDATING -->
         <div class="column upd-col">
             <div class="dept-title">UPDATING</div>
             <div class="now-serving">NOW SERVING</div>
@@ -154,20 +103,11 @@
             <div id="type-UPDATING" class="status-label">VACANT</div>
             <div class="proceed-text">PLEASE PROCEED TO TABLE # <span id="table-UPDATING" class="table-num">0</span></div>
         </div>
-
-        <div class="column pri-col">
-            <div class="dept-title">PRINTING</div>
-            <div class="now-serving">NOW SERVING</div>
-            <div id="num-PRINTING" class="number">---</div>
-            <div id="type-PRINTING" class="status-label">VACANT</div>
-            <div class="proceed-text">PLEASE PROCEED TO TABLE # <span id="table-PRINTING" class="table-num">0</span></div>
-        </div>
     </div>
 
     <div class="footer-bar">
         <div class="history-label">PREVIOUSLY CALLED<br>(WAITING/NO-SHOW)</div>
-        <div id="historyList" class="history-list">
-            </div>
+        <div id="historyList" class="history-list"></div>
     </div>
 
     <audio id="ding" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"></audio>
@@ -181,7 +121,7 @@
         const data = snapshot.val() || {};
         const display = data.queue_display || {};
         const history = data.queue_history || [];
-        const depts = ['REGISTRATION', 'UPDATING', 'PRINTING'];
+        const depts = ['REGISTRATION', 'UPDATING'];
 
         depts.forEach(dept => {
             const numEl = document.getElementById(`num-${dept}`);
@@ -194,11 +134,7 @@
                     numEl.innerText = newNum;
                     typeEl.innerText = display[dept].type;
                     tableEl.innerText = display[dept].table;
-                    
-                    // Voice/Sound notification
                     document.getElementById('ding').play().catch(() => {});
-                    
-                    // Flash effect
                     numEl.classList.remove('flash');
                     void numEl.offsetWidth;
                     numEl.classList.add('flash');
@@ -210,38 +146,19 @@
             }
         });
 
-        // --- RENDER HISTORY (FOOTER) ---
-const histListEl = document.getElementById('historyList');
-
-histListEl.innerHTML = history.slice(0, 4).map(item => `
-    <div class="history-card" style="
-        background: #1e293b; 
-        padding: 12px 20px; 
-        border-radius: 12px; 
-        min-width: 250px; 
-        position: relative; 
-        overflow: hidden; 
-        border-left: 6px solid ${
-            item.dept === 'REGISTRATION' ? 'var(--reg-red)' : 
-            item.dept === 'UPDATING' ? 'var(--upd-yellow)' : 'var(--pri-blue)'
-        }; 
-        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-        animation: popIn 0.5s ease-out;">
-        
-        <span style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; font-weight: 800; display: block; letter-spacing: 1px;">
-            ${item.dept}
-        </span>
-        
-        <div style="display: flex; align-items: baseline; gap: 10px; margin-top: 2px;">
-            <b style="font-size: 1.5rem; color: white;">Ticket #${item.num}</b>
-            <span style="font-size: 1.1rem; font-weight: 800; color: white;">(${item.type})</span>
-        </div>
-        
-        <div style="font-size: 0.9rem; color: #cbd5e1; margin-top: 2px; font-weight: bold;">
-            Table #${item.table}
-        </div>
-    </div>
-`).join('');
+        const histListEl = document.getElementById('historyList');
+        histListEl.innerHTML = history.slice(0, 4).map(item => `
+            <div class="history-card" style="border-left: 6px solid ${item.dept === 'REGISTRATION' ? 'var(--reg-red)' : 'var(--upd-yellow)'}">
+                <span class="dept">${item.dept}</span>
+                <div style="display: flex; align-items: baseline; gap: 10px; margin-top: 2px;">
+                    <b>Ticket #${item.num}</b>
+                    <span class="type">(${item.type})</span>
+                </div>
+                <div style="font-size: 0.9rem; color: #cbd5e1; margin-top: 2px; font-weight: bold;">
+                    Table #${item.table}
+                </div>
+            </div>
+        `).join('');
     });
 </script>
 </body>
