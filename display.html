@@ -27,7 +27,7 @@
             width: 100vw;
             display: flex; 
             flex-direction: column; 
-            overflow: hidden; 
+            overflow-x: hidden; 
         }
 
         header { 
@@ -38,12 +38,12 @@
             gap: 2vw;
             background: rgba(0,0,0,0.2);
             padding: 1vh 0;
+            flex-shrink: 0;
         }
         .logo { height: 8vh; width: auto; } 
         .header-text h1 { margin: 0; font-size: 3.5vh; font-weight: 900; letter-spacing: 2px; }
         .header-text h2 { margin: 0; font-size: 2.5vh; font-weight: 700; letter-spacing: 1px; color: #f8fafc; text-align: center; }
 
-        /* NOTICE BAR */
         .notice-bar {
             background: #000;
             white-space: nowrap;
@@ -53,6 +53,7 @@
             align-items: center;
             border-top: 1px solid rgba(255,255,255,0.1);
             border-bottom: 1px solid rgba(255,255,255,0.1);
+            flex-shrink: 0;
         }
 
         .notice-content {
@@ -73,11 +74,11 @@
             100% { transform: translate(-100%, 0); }
         }
 
-        /* MAIN DISPLAY AREA */
         .main-container { 
             flex: 1; 
             display: flex; 
             width: 100%;
+            overflow-y: auto; /* Allows scrolling if content stacks on mobile */
         }
         .column { 
             flex: 1; 
@@ -107,7 +108,6 @@
         .reg-col .dept-title, .reg-col .number { color: var(--reg-red); }
         .upd-col .dept-title, .upd-col .number { color: var(--upd-yellow); }
 
-        /* FOOTER */
         .footer-bar { 
             background: var(--footer-bg); 
             height: 18vh; 
@@ -115,6 +115,7 @@
             align-items: center; 
             padding: 0 2vw; 
             border-top: 3px solid #334155; 
+            flex-shrink: 0;
         }
 
         .history-label { 
@@ -139,6 +140,25 @@
             animation: slideInBottom 0.5s ease-out forwards;
         }
 
+        /* MOBILE RESPONSIVE OVERRIDES */
+        @media (max-width: 768px) {
+            body { height: auto; overflow: auto; }
+            header { height: auto; padding: 20px; }
+            .main-container { flex-direction: column; height: auto; }
+            .column { border-right: none; border-bottom: 2px solid rgba(255,255,255,0.05); padding: 40px 20px; }
+            .footer-bar { height: auto; flex-direction: column; padding: 20px; gap: 15px; }
+            .history-label { border-right: none; border-bottom: 2px solid #334155; padding: 0 0 10px 0; margin: 0; text-align: center; width: 100%; }
+            .history-list { width: 100%; justify-content: center; }
+            .history-card { flex: 0 0 40vw; height: 15vh; }
+            .qr-container { border-left: none; border-top: 2px solid #334155; padding: 15px 0 0 0; margin: 0; width: 100%; }
+            
+            /* Font Scaling for Mobile */
+            .dept-title { font-size: 4vh; }
+            .number { font-size: 12vh; }
+            .status-label { font-size: 3vh; }
+            .proceed-text { font-size: 2vh; }
+        }
+
         @keyframes slideInBottom {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -154,7 +174,6 @@
         .history-card span.type { font-size: 1.8vh; font-weight: 800; color: white; }
         .history-card span.dept { font-size: 1.4vh; color: #94a3b8; text-transform: uppercase; font-weight: 800; display: block; letter-spacing: 1px; }
 
-        /* QR SECTION */
         .qr-container {
             display: flex;
             flex-direction: column;
@@ -274,7 +293,6 @@
                     typeEl.innerText = display[dept].type;
                     tableEl.innerText = display[dept].table;
                     
-                    // Trigger sound
                     const audio = document.getElementById('ding');
                     audio.currentTime = 0;
                     audio.play().catch(e => console.log("Sound blocked. Click page once to enable."));
