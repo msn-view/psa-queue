@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PSA Public Display</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
@@ -15,35 +16,41 @@
             --card-bg: #1e293b;
         }
         
+        * { box-sizing: border-box; }
+
         body { 
             background: var(--bg-dark); 
             color: white; 
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            font-family: 'Segoe UI', Roboto, sans-serif; 
             margin: 0; 
             height: 100vh; 
+            width: 100vw;
             display: flex; 
             flex-direction: column; 
             overflow: hidden; 
         }
 
         header { 
-            padding: 20px 0; 
+            height: 12vh;
             display: flex; 
             justify-content: center; 
             align-items: center; 
-            gap: 30px;
+            gap: 2vw;
             background: rgba(0,0,0,0.2);
+            padding: 1vh 0;
         }
-        .logo { width: 100px; height: auto; } 
-        .header-text h1 { margin: 0; font-size: 38px; font-weight: 900; letter-spacing: 2px; }
-        .header-text h2 { margin: 0; font-size: 28px; font-weight: 700; letter-spacing: 1px; color: #f8fafc; text-align: center; }
+        .logo { height: 8vh; width: auto; } 
+        .header-text h1 { margin: 0; font-size: 3.5vh; font-weight: 900; letter-spacing: 2px; }
+        .header-text h2 { margin: 0; font-size: 2.5vh; font-weight: 700; letter-spacing: 1px; color: #f8fafc; text-align: center; }
 
-        /* NOTICE BAR STYLES */
+        /* NOTICE BAR */
         .notice-bar {
             background: #000;
             white-space: nowrap;
             overflow: hidden;
-            padding: 15px 0;
+            height: 6vh;
+            display: flex;
+            align-items: center;
             border-top: 1px solid rgba(255,255,255,0.1);
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
@@ -52,17 +59,12 @@
             display: inline-block;
             padding-left: 100%;
             animation: marquee 25s linear infinite;
-            font-size: 2.2rem;
+            font-size: 3vh;
             font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 3px;
         }
 
-        .notice-text {
-            display: inline-flex;
-            gap: 20px;
-        }
-
+        .notice-text { display: inline-flex; gap: 5vw; }
         .notice-red { color: #ff3e3e; text-shadow: 0 0 10px rgba(255, 62, 62, 0.5); }
         .notice-white { color: #ffffff; }
 
@@ -71,7 +73,12 @@
             100% { transform: translate(-100%, 0); }
         }
 
-        .main-container { flex: 1; display: flex; padding: 20px 0 60px 0; }
+        /* MAIN DISPLAY AREA */
+        .main-container { 
+            flex: 1; 
+            display: flex; 
+            width: 100%;
+        }
         .column { 
             flex: 1; 
             display: flex; 
@@ -80,45 +87,54 @@
             justify-content: center;
             text-align: center;
             border-right: 2px solid rgba(255,255,255,0.05);
+            padding: 2vh;
         }
         .column:last-child { border-right: none; }
 
-        .dept-title { font-size: 3.5rem; font-weight: 800; margin-bottom: 40px; letter-spacing: 3px; }
-        .now-serving { font-size: 1.8rem; font-weight: 600; color: #94a3b8; margin-bottom: 10px; }
-        .number { font-size: 14rem; font-weight: 900; margin: -10px 0; line-height: 1; text-shadow: 0 15px 30px rgba(0,0,0,0.5); }
-        .status-label { font-size: 2rem; font-weight: 800; margin: 30px 0 10px 0; }
-        .proceed-text { font-size: 1.5rem; font-weight: 400; color: #cbd5e1; }
-        .table-num { font-weight: 900; font-size: 2rem; color: white; }
+        .dept-title { font-size: 6vh; font-weight: 800; margin-bottom: 2vh; letter-spacing: 3px; }
+        .now-serving { font-size: 2.5vh; font-weight: 600; color: #94a3b8; }
+        .number { 
+            font-size: 22vh; 
+            font-weight: 900; 
+            margin: 1vh 0; 
+            line-height: 1; 
+            text-shadow: 0 1vh 2vh rgba(0,0,0,0.5); 
+        }
+        .status-label { font-size: 4vh; font-weight: 800; margin: 2vh 0; }
+        .proceed-text { font-size: 2.5vh; font-weight: 400; color: #cbd5e1; }
+        .table-num { font-weight: 900; font-size: 3vh; color: white; }
 
         .reg-col .dept-title, .reg-col .number { color: var(--reg-red); }
         .upd-col .dept-title, .upd-col .number { color: var(--upd-yellow); }
 
-        /* FOOTER BAR CORRECTED */
+        /* FOOTER */
         .footer-bar { 
             background: var(--footer-bg); 
-            height: 150px; 
+            height: 18vh; 
             display: flex; 
             align-items: center; 
-            padding: 0 30px; 
+            padding: 0 2vw; 
             border-top: 3px solid #334155; 
         }
 
         .history-label { 
-            font-size: 1rem; color: #64748b; font-weight: 800; 
+            font-size: 1.8vh; color: #64748b; font-weight: 800; 
             text-transform: uppercase; border-right: 3px solid #334155; 
-            padding-right: 30px; margin-right: 30px; white-space: nowrap; line-height: 1.2; 
+            padding-right: 2vw; margin-right: 2vw; white-space: nowrap; line-height: 1.2; 
         }
         
-        .history-list { display: flex; gap: 25px; flex: 1; overflow: hidden; }
+        .history-list { display: flex; gap: 1.5vw; flex: 1; overflow: hidden; }
 
         .history-card { 
             background: #1e293b; 
-            padding: 12px 20px; 
+            padding: 1.5vh 1.5vw; 
             border-radius: 12px; 
-            min-width: 220px; 
-            max-width: 220px;
+            flex: 0 0 15vw;
+            height: 12vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
             position: relative; 
-            overflow: hidden; 
             box-shadow: 0 4px 6px rgba(0,0,0,0.3); 
             animation: slideInBottom 0.5s ease-out forwards;
         }
@@ -128,61 +144,33 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .fade-out-footer {
-            animation: fadeOutExit 0.5s ease-in forwards;
-        }
-
+        .fade-out-footer { animation: fadeOutExit 0.5s ease-in forwards; }
         @keyframes fadeOutExit {
             from { opacity: 1; transform: scale(1); }
             to { opacity: 0; transform: scale(0.9); }
         }
 
-        .history-card b { font-size: 1.3rem; color: white; }
-        .history-card span.type { font-size: 1rem; font-weight: 800; color: white; }
-        .history-card span.dept { font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; font-weight: 800; display: block; letter-spacing: 1px; }
+        .history-card b { font-size: 2.5vh; color: white; }
+        .history-card span.type { font-size: 1.8vh; font-weight: 800; color: white; }
+        .history-card span.dept { font-size: 1.4vh; color: #94a3b8; text-transform: uppercase; font-weight: 800; display: block; letter-spacing: 1px; }
 
-        /* QR SECTION WITHIN FOOTER */
+        /* QR SECTION */
         .qr-container {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding-left: 20px;
+            padding-left: 2vw;
             border-left: 3px solid #334155;
-            margin-left: 10px;
+            margin-left: 1vw;
             height: 100%;
         }
-
-        .qr-label {
-            font-size: 0.8rem;
-            font-weight: 900;
-            color: #ffffff;
-            text-transform: uppercase;
-            margin-bottom: 5px;
-            letter-spacing: 1px;
-        }
-
-        .qr-image {
-            width: 80px;
-            height: 80px;
-            background: white;
-            padding: 4px;
-            border-radius: 5px;
-        }
-
-        .qr-subtext {
-            font-size: 0.65rem;
-            font-weight: 800;
-            color: #ffffff;
-            text-align: center;
-            text-transform: uppercase;
-            margin-top: 5px;
-            line-height: 1.1;
-        }
+        .qr-label { font-size: 1.5vh; font-weight: 900; color: #ffffff; text-transform: uppercase; margin-bottom: 0.5vh; }
+        .qr-image { height: 10vh; width: auto; background: white; padding: 4px; border-radius: 5px; }
+        .qr-subtext { font-size: 1.2vh; font-weight: 800; color: #ffffff; text-align: center; text-transform: uppercase; margin-top: 0.5vh; line-height: 1.1; }
 
         .flash { animation: highlight 0.8s ease-in-out 3; }
         @keyframes highlight { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-        
     </style>
 </head>
 <body>
@@ -199,7 +187,6 @@
         <div class="notice-content">
             <span class="notice-text">
                 <span class="notice-red">NOTICE:</span> <span class="notice-white">ONE NUMBER, ONE TRANSACTION</span>
-                <span class="notice-red" style="margin-left: 100px;">NOTICE:</span> <span class="notice-white">ONE NUMBER, ONE TRANSACTION</span>
                 <span class="notice-red" style="margin-left: 100px;">NOTICE:</span> <span class="notice-white">ONE NUMBER, ONE TRANSACTION</span>
                 <span class="notice-red" style="margin-left: 100px;">NOTICE:</span> <span class="notice-white">ONE NUMBER, ONE TRANSACTION</span>
             </span>
@@ -224,12 +211,9 @@
         </div>
     </div>
 
-    <!-- Corrected Footer with QR nested inside -->
     <div class="footer-bar">
         <div class="history-label">PREVIOUSLY CALLED<br>(WAITING/NO-SHOW)</div>
-        
         <div id="historyList" class="history-list"></div>
-
         <div class="qr-container">
             <div class="qr-label">SCAN TO:</div>
             <img src="qrdisplay.png" alt="QR Code" class="qr-image">
@@ -237,7 +221,7 @@
         </div>
     </div>
 
-    <audio id="ding" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"></audio>
+    <audio id="ding" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
 
 <script>
     const firebaseConfig = { databaseURL: "https://psa-queue-default-rtdb.asia-southeast1.firebasedatabase.app/" };
@@ -251,33 +235,24 @@
     function updateFooter(history) {
         const histListEl = document.getElementById('historyList');
         if (!histListEl) return;
-
         const totalItems = history.length;
         if (totalItems === 0) {
             histListEl.innerHTML = '<div style="color: #475569; font-style: italic;">No pending calls.</div>';
             return;
         }
-
         const start = historyPageIndex * CARDS_PER_PAGE;
-        if (start >= totalItems) {
-            historyPageIndex = 0;
-        }
-        
+        if (start >= totalItems) historyPageIndex = 0;
         const pageItems = history.slice(historyPageIndex * CARDS_PER_PAGE, (historyPageIndex + 1) * CARDS_PER_PAGE);
-
         histListEl.innerHTML = pageItems.map(item => `
             <div class="history-card" style="border-left: 6px solid ${item.dept === 'REGISTRATION' ? 'var(--reg-red)' : 'var(--upd-yellow)'}">
                 <span class="dept">${item.dept}</span>
-                <div style="display: flex; align-items: baseline; gap: 10px; margin-top: 2px;">
-                    <b style="font-size: 1.3rem; color: white;">Ticket #${item.num}</b>
-                    <span class="type" style="font-size: 1rem; font-weight: 800; color: white;">(${item.type})</span>
+                <div style="display: flex; align-items: baseline; gap: 0.5vw; margin-top: 0.5vh;">
+                    <b>Ticket #${item.num}</b>
+                    <span class="type">(${item.type})</span>
                 </div>
-                <div style="font-size: 0.9rem; color: #cbd5e1; margin-top: 2px; font-weight: bold;">
-                    Table #${item.table}
-                </div>
+                <div style="font-size: 1.6vh; color: #cbd5e1; margin-top: 0.5vh; font-weight: bold;">Table #${item.table}</div>
             </div>
         `).join('');
-
         historyPageIndex++;
     }
 
@@ -298,7 +273,12 @@
                     numEl.innerText = newNum;
                     typeEl.innerText = display[dept].type;
                     tableEl.innerText = display[dept].table;
-                    document.getElementById('ding').play().catch(() => {});
+                    
+                    // Trigger sound
+                    const audio = document.getElementById('ding');
+                    audio.currentTime = 0;
+                    audio.play().catch(e => console.log("Sound blocked. Click page once to enable."));
+                    
                     numEl.classList.remove('flash');
                     void numEl.offsetWidth;
                     numEl.classList.add('flash');
@@ -309,7 +289,6 @@
                 tableEl.innerText = "0";
             }
         });
-
         updateFooter(latestHistoryData);
     });
 
@@ -317,10 +296,7 @@
         if (latestHistoryData.length > CARDS_PER_PAGE) {
             const cards = document.querySelectorAll('.history-card');
             cards.forEach(c => c.classList.add('fade-out-footer'));
-
-            setTimeout(() => {
-                updateFooter(latestHistoryData);
-            }, 500);
+            setTimeout(() => updateFooter(latestHistoryData), 500);
         }
     }, 8000);
 </script>
