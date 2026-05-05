@@ -1,536 +1,229 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
     <title>PSA Admin</title>
-
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-
     <style>
-
         :root { --psa-blue: #1a4a7c; --psa-light-blue: #3e6d9c; --psa-bg: #808080; --accent-teal: #17a2b8; --panel-bg: #d1d9e2; --history-bg: #e2e8f0; }
-
         body { font-family: 'Segoe UI', sans-serif; background: var(--psa-bg); margin: 0; padding: 0; }
-
         header { padding: 15px; display: flex; align-items: center; justify-content: center; color: white; }
-
         .logo { width: 70px; margin-right: 15px; }
-
         .header-text h1 { margin: 0; font-size: 24px; }
-
         .header-text p { margin: 0; font-size: 20px; text-align: center; font-weight: bold; }
-
         .management-bar { background: #222; color: white; width: 85%; margin: 10px auto; padding: 8px 20px; border-radius: 25px; display: flex; justify-content: space-between; align-items: center; }
-
         .reset-btn { background: #8b1a1a; color: white; border: none; padding: 5px 15px; border-radius: 15px; cursor: pointer; font-weight: bold; }
-
         .tabs-container { display: flex; justify-content: center; gap: 15px; margin: 15px 0; }
-
         .tab-link { background: white; color: var(--psa-blue); border: none; padding: 8px 30px; border-radius: 20px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-
         .tab-link.active { background: var(--psa-light-blue); color: white; }
-
         .main-card { background: #fdfdfd; width: 950px; margin: 0 auto 40px; border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-
         .dept-title { text-align: center; color: var(--psa-blue); font-size: 28px; border-bottom: 2px solid #ccc; padding-bottom: 10px; margin-bottom: 15px; text-transform: uppercase; }
-
         .serving-box { background: var(--panel-bg); border-radius: 15px; padding: 15px; text-align: center; margin-bottom: 15px; }
-
         .serving-box h2 { color: var(--psa-blue); margin: 5px 0; font-size: 28px; font-weight: 800; }
-
         .mark-done-btn { background: var(--accent-teal); color: white; border: none; padding: 8px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; }
-
         .controls { display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 15px; }
-
         .add-btn { color: white; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: bold; }
-
         .add-reg { background: var(--psa-blue); }
-
         .add-pri { background: #2c3e50; }
-
         .queues-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
-
         .queue-panel { background: var(--panel-bg); border-radius: 12px; padding: 12px; min-height: 180px; }
-
         .queue-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #b8c1cc; }
-
         .queue-row h3 { margin: 0; color: var(--psa-blue); font-size: 18px; }
-
         .serve-btn { background: var(--accent-teal); color: white; border: none; padding: 5px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; }
-
         .not-catered-section { background: var(--history-bg); border-radius: 12px; padding: 15px; border: 1px solid #cbd5e0; }
-
         .not-catered-title { color: #4a5568; font-size: 14px; font-weight: bold; margin-bottom: 10px; text-transform: uppercase; border-bottom: 1px solid #cbd5e0; padding-bottom: 5px; }
-
         .history-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #cbd5e0; }
-
         .tab-content { display: none; }
-
         .tab-content.active { display: block; }
-
     </style>
-
-   
-
 </head>
-
 <body>
 
-
-
     <header>
-
         <img src="PSALOGO.png" alt="" class="logo">
-
         <div class="header-text">
-
             <h1>PHILIPPINE STATISTICS AUTHORITY</h1>
-
             <p>NEGROS OCCIDENTAL</p>
-
         </div>
-
     </header>
 
-
-
     <div class="management-bar">
-
-    <span style="letter-spacing: 2px; font-weight: bold; font-size: 14px;">HOSTESS MANAGEMENT</span>
-
-    <div>
-
-        <button class="reset-btn" onclick="resetQueue()">RESET QUEUE</button>
-
-        <button class="reset-btn" style="background:#555; margin-left:10px;" onclick="handleLogout()">LOGOUT</button>
-
+        <span style="letter-spacing: 2px; font-weight: bold; font-size: 14px;">HOSTESS MANAGEMENT</span>
+        <div>
+            <button class="reset-btn" onclick="resetQueue()">RESET QUEUE</button>
+            <button class="reset-btn" style="background:#555; margin-left:10px;" onclick="handleLogout()">LOGOUT</button>
+        </div>
     </div>
 
-</div>
-
-
-
     <div class="tabs-container" id="tabs-nav"></div>
-
     <div class="main-card"><div id="tab-container"></div></div>
 
-
-
 <script>
-
-
-
-    // Security Check: Redirect to login if no valid session exists
-
+    // Security Check
     const session = localStorage.getItem('psa_admin_session');
-
     const currentTime = new Date().getTime();
-
-
-
     if (!session || currentTime > session) {
-
         localStorage.removeItem('psa_admin_session');
-
         window.location.href = "login.html";
-
     }
-
     
-
-    // --- 1. FIREBASE CONFIG ---
-
+    // Firebase Config
     const firebaseConfig = { databaseURL: "https://psa-queue-default-rtdb.asia-southeast1.firebasedatabase.app/" };
-
     firebase.initializeApp(firebaseConfig);
-
     const db = firebase.database();
 
-
-
-    const depts = ['REGISTRATION', 'UPDATING', 'PRINTING'];
-
-    let localQueues = { REGISTRATION: { REGULAR: [], PRIORITY: [] }, UPDATING: { REGULAR: [], PRIORITY: [] }, PRINTING: { REGULAR: [], PRIORITY: [] } };
-
+    // REMOVED PRINTING FROM HERE
+    const depts = ['REGISTRATION', 'UPDATING'];
+    let localQueues = { REGISTRATION: { REGULAR: [], PRIORITY: [] }, UPDATING: { REGULAR: [], PRIORITY: [] } };
     let isInitialized = false;
 
-
-
-    // --- 2. INITIALIZE UI ---
-
     function init() {
-
         document.getElementById('tabs-nav').innerHTML = depts.map((d, i) => 
-
             `<button class="tab-link ${i===0?'active':''}" onclick="openTab(event, '${d}')">${d}</button>`).join('');
 
-
-
         document.getElementById('tab-container').innerHTML = depts.map((dept, i) => `
-
             <div id="${dept}" class="tab-content ${i===0?'active':''}">
-
                 <h1 class="dept-title">${dept}</h1>
-
                 <div class="serving-box">
-
                     <small>CURRENTLY AT TABLE</small><h2 id="now-${dept}">NONE</h2>
-
                     <button class="mark-done-btn" onclick="markDone('${dept}')">MARK AS DONE</button>
-
                 </div>
-
                 <div class="controls">
-
                     <label>TABLE (1-5):</label>
-
-                    <input type="number" id="table-${dept}" style="width:40px" value="${dept==='REGISTRATION'?3:dept==='UPDATING'?4:1}" min="1" max="5">
-
+                    <input type="number" id="table-${dept}" style="width:40px" value="${dept==='REGISTRATION'?3:4}" min="1" max="5">
                     <button class="add-btn add-reg" onclick="addTicket('${dept}', 'REGULAR')">+REGULAR</button>
-
                     <button class="add-btn add-pri" onclick="addTicket('${dept}', 'PRIORITY')">+PRIORITY</button>
-
                 </div>
-
                 <div class="queues-grid">
-
                     <div class="queue-panel" id="list-${dept}-REGULAR"></div>
-
                     <div class="queue-panel" id="list-${dept}-PRIORITY"></div>
-
                 </div>
-
                 <div class="not-catered-section">
-
                     <div class="not-catered-title">Previously Called (Pending / No-Show)</div>
-
                     <div id="history-list-${dept}"></div>
-
                 </div>
-
             </div>
-
         `).join('');
-
         isInitialized = true;
-
     }
-
-
-
-    // --- 3. FIREBASE LISTENER ---
 
     db.ref('/').on('value', (snapshot) => {
-
         if (!isInitialized) return;
-
-
-
         const data = snapshot.val() || {};
-
         
-
-        // Ensure counters exist
-
         window.currentCounters = data.counters || { 
-
             REGISTRATION: {REGULAR:1, PRIORITY:1}, 
-
-            UPDATING: {REGULAR:1, PRIORITY:1}, 
-
-            PRINTING: {REGULAR:1, PRIORITY:1} 
-
+            UPDATING: {REGULAR:1, PRIORITY:1} 
         };
-
         
-
         window.currentHistory = data.queue_history || [];
-
         window.currentDisplay = data.queue_display || {};
-
+        localQueues = data.queues || { REGISTRATION: { REGULAR: [], PRIORITY: [] }, UPDATING: { REGULAR: [], PRIORITY: [] } };
         
-
-        // Load queues correctly
-
-        localQueues = data.queues || { 
-
-            REGISTRATION: { REGULAR: [], PRIORITY: [] }, 
-
-            UPDATING: { REGULAR: [], PRIORITY: [] }, 
-
-            PRINTING: { REGULAR: [], PRIORITY: [] } 
-
-        };
-
-        
-
-        // Double check deep structure of localQueues
-
         depts.forEach(d => {
-
             if (!localQueues[d]) localQueues[d] = { REGULAR: [], PRIORITY: [] };
-
-            if (!localQueues[d].REGULAR) localQueues[d].REGULAR = [];
-
-            if (!localQueues[d].PRIORITY) localQueues[d].PRIORITY = [];
-
+            depts.forEach(d => render(d));
         });
-
-
-
-        depts.forEach(d => render(d));
-
     });
-
-
 
     function openTab(evt, deptName) {
-
         document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-
         document.querySelectorAll('.tab-link').forEach(l => l.classList.remove('active'));
-
         document.getElementById(deptName).classList.add('active');
-
         evt.currentTarget.classList.add('active');
-
     }
-
-
 
     function addTicket(dept, type) {
-
         if (!window.currentCounters || !window.currentCounters[dept]) return;
-
-        
-
         const nextNum = window.currentCounters[dept][type];
-
-        
-
-        // Ensure local structure is safe before pushing
-
         if (!localQueues[dept][type]) localQueues[dept][type] = [];
-
-        
-
         localQueues[dept][type].push(nextNum);
-
         window.currentCounters[dept][type]++;
-
-        
-
-        // Push update to Firebase
-
-        db.ref('/').update({ 
-
-            queues: localQueues, 
-
-            counters: window.currentCounters 
-
-        });
-
+        db.ref('/').update({ queues: localQueues, counters: window.currentCounters });
     }
-
-
 
     function serve(dept, type, index) {
-
         const ticketNum = localQueues[dept][type][index];
-
-        const tableInput = document.getElementById(`table-${dept}`);
-
-        const table = tableInput ? tableInput.value : "0";
-
-        
-
+        const table = document.getElementById(`table-${dept}`).value || "0";
         const history = window.currentHistory || [];
-
-        const display = window.currentDisplay || {};
-
-
-
-        // Move current serving to history
-
-        // Inside your admin.html serve function
-if (display[dept]) {
-    history.unshift({
-        num: display[dept].num,
-        type: display[dept].type, // <--- Ensure this line exists
-        table: display[dept].table,
-        dept: dept,
-        timestamp: Date.now()
-    });
-}
-
-
-
-        // Update display with new number
-
-        display[dept] = { num: ticketNum, type: type, table: table };
-
-        
-
-        // Remove from the pending queue
-
-        localQueues[dept][type].splice(index, 1);
-
-
-
-        db.ref('/').update({ 
-
-            queue_display: display, 
-
-            queue_history: history, 
-
-            queues: localQueues 
-
-        });
-
-    }
-
-
-
-    function markDone(dept) {
-
         const display = window.currentDisplay || {};
 
         if (display[dept]) {
-
-            delete display[dept];
-
-            db.ref('queue_display').set(display);
-
+            history.unshift({
+                num: display[dept].num,
+                type: display[dept].type,
+                table: display[dept].table,
+                dept: dept,
+                timestamp: Date.now()
+            });
         }
 
+        display[dept] = { num: ticketNum, type: type, table: table };
+        localQueues[dept][type].splice(index, 1);
+
+        db.ref('/').update({ 
+            queue_display: display, 
+            queue_history: history, 
+            queues: localQueues 
+        });
     }
 
-
+    function markDone(dept) {
+        const display = window.currentDisplay || {};
+        if (display[dept]) {
+            delete display[dept];
+            db.ref('queue_display').set(display);
+        }
+    }
 
     function markHistoryDone(ts) {
-
         const history = (window.currentHistory || []).filter(item => item.timestamp !== ts);
-
         db.ref('queue_history').set(history);
-
     }
-
-
 
     function render(dept) {
-
         const regList = document.getElementById(`list-${dept}-REGULAR`);
-
         const priList = document.getElementById(`list-${dept}-PRIORITY`);
-
         const nowEl = document.getElementById(`now-${dept}`);
-
         const histEl = document.getElementById(`history-list-${dept}`);
 
-
-
         if (regList) {
-
             regList.innerHTML = (localQueues[dept].REGULAR || []).map((num, i) => `
-
                 <div class="queue-row"><h3>#${num} (REG)</h3><button class="serve-btn" onclick="serve('${dept}', 'REGULAR', ${i})">SERVE</button></div>`).join('');
-
         }
-
-        
-
         if (priList) {
-
             priList.innerHTML = (localQueues[dept].PRIORITY || []).map((num, i) => `
-
                 <div class="queue-row"><h3>#${num} (PRI)</h3><button class="serve-btn" onclick="serve('${dept}', 'PRIORITY', ${i})">SERVE</button></div>`).join('');
-
         }
-
-
 
         const d = window.currentDisplay || {};
-
         if (nowEl) nowEl.innerText = d[dept] ? `#${d[dept].num} (${d[dept].type})` : "NONE";
 
-
-
         const h = window.currentHistory || [];
-
         const deptH = h.filter(item => item.dept === dept);
-
         if (histEl) {
-
             histEl.innerHTML = deptH.map(item => `
-
                 <div class="history-row"><span>#${item.num} (${item.type})</span><button class="serve-btn" style="background:#4a5568" onclick="markHistoryDone(${item.timestamp})">DONE</button></div>
-
             `).join('') || '<div style="color:#a0aec0; font-size:12px">No pending no-shows.</div>';
-
         }
-
     }
-
-
 
     function resetQueue() { 
-
         if(confirm("Reset all? This will wipe the database and start from #1.")) {
-
             db.ref('/').remove(); 
-
             location.reload();
-
         }
-
     }
 
-
-
-   function handleLogout() {
-
-    // This creates the confirmation pop-up
-
-    const confirmLogout = confirm("Are you sure you want to log out of the Hostess Management station?");
-
-
-
-    if (confirmLogout) {
-
-        // 1. Remove the security session from the browser
-
-        localStorage.removeItem('psa_admin_session');
-
-        
-
-        // 2. Redirect the user back to the login page
-
-        window.location.href = "login.html";
-
-    } else {
-
-        // If they click 'Cancel', nothing happens and they stay on the page
-
-        console.log("Logout cancelled by user.");
-
+    function handleLogout() {
+        if (confirm("Are you sure you want to log out?")) {
+            localStorage.removeItem('psa_admin_session');
+            window.location.href = "login.html";
+        }
     }
-
-}
-
-
-
-    // Call init first
 
     init();
-
 </script>
-
 </body>
-
 </html>
