@@ -25,22 +25,24 @@
             min-height: 100vh; 
             display: flex; 
             flex-direction: column; 
+            overflow-x: hidden;
         }
 
-        /* HEADER - Responsive height */
+        /* HEADER */
         header { 
-            padding: 15px 10px;
+            padding: 15px;
             display: flex; 
             justify-content: center; 
             align-items: center; 
             gap: 15px;
             background: rgba(0,0,0,0.2);
+            flex-shrink: 0;
         }
-        .logo { height: 60px; width: auto; } 
-        .header-text h1 { margin: 0; font-size: clamp(18px, 4vw, 32px); font-weight: 900; }
-        .header-text h2 { margin: 0; font-size: clamp(14px, 3vw, 22px); color: #f8fafc; text-align: center; }
+        .logo { height: clamp(40px, 8vh, 80px); width: auto; } 
+        .header-text h1 { margin: 0; font-size: clamp(16px, 4vw, 32px); font-weight: 900; }
+        .header-text h2 { margin: 0; font-size: clamp(12px, 3vw, 20px); text-align: center; opacity: 0.9; }
 
-        /* NOTICE BAR */
+        /* NOTICE MARQUEE */
         .notice-bar {
             background: #000;
             white-space: nowrap;
@@ -49,12 +51,11 @@
             border-top: 1px solid rgba(255,255,255,0.1);
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-
         .notice-content {
             display: inline-block;
             padding-left: 100%;
             animation: marquee 25s linear infinite;
-            font-size: 1.5rem;
+            font-size: clamp(1.2rem, 3vh, 2rem);
             font-weight: 900;
             text-transform: uppercase;
         }
@@ -63,89 +64,87 @@
             100% { transform: translate(-100%, 0); }
         }
 
-        /* MAIN DISPLAY AREA - Responsive Grid */
+        /* MAIN DISPLAY - Responsive Grid */
         .main-container { 
             flex: 1; 
             display: flex; 
-            flex-wrap: wrap; /* Allows stacking on mobile */
+            flex-wrap: wrap; /* Key for Mobile Responsiveness */
             width: 100%;
         }
         .column { 
-            flex: 1; 
-            min-width: 300px; /* Forces stack on small screens */
+            flex: 1 1 350px; /* Bases to 350px then grows, stacks if smaller */
             display: flex; 
             flex-direction: column; 
             align-items: center; 
             justify-content: center;
             text-align: center;
-            padding: 40px 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-        .column:first-child { border-right: 1px solid rgba(255,255,255,0.05); }
+        @media (min-width: 769px) {
+            .column:first-child { border-right: 1px solid rgba(255,255,255,0.1); }
+            body { overflow: hidden; } /* Lock screen on TVs */
+        }
 
-        .dept-title { font-size: clamp(2.5rem, 8vw, 4.5rem); font-weight: 800; margin-bottom: 10px; }
-        .now-serving { font-size: 1.2rem; color: #94a3b8; }
+        .dept-title { font-size: clamp(2rem, 6vh, 4rem); font-weight: 800; margin-bottom: 5px; }
+        .now-serving { font-size: 1.2rem; color: #94a3b8; font-weight: bold; }
         .number { 
-            font-size: clamp(8rem, 20vw, 15rem); 
+            font-size: clamp(6rem, 20vh, 14rem); 
             font-weight: 900; 
-            margin: 10px 0; 
             line-height: 1; 
+            margin: 10px 0;
             text-shadow: 0 10px 20px rgba(0,0,0,0.5); 
         }
-        .status-label { font-size: clamp(1.5rem, 5vw, 2.5rem); font-weight: 800; margin-bottom: 10px; }
-        .proceed-text { font-size: 1.1rem; color: #cbd5e1; }
-        .table-num { font-weight: 900; font-size: 1.5rem; color: white; }
+        .status-label { font-size: clamp(1.5rem, 4vh, 2.5rem); font-weight: 800; }
+        .proceed-text { font-size: 1.1rem; color: #cbd5e1; margin-top: 10px; }
+        .table-num { font-weight: 900; font-size: 1.4rem; color: white; }
 
         .reg-col .dept-title, .reg-col .number { color: var(--reg-red); }
         .upd-col .dept-title, .upd-col .number { color: var(--upd-yellow); }
 
-        /* FOOTER - Responsive height */
+        /* FOOTER */
         .footer-bar { 
             background: var(--footer-bg); 
-            min-height: 150px; 
-            display: flex; 
-            flex-direction: row;
-            align-items: center; 
-            padding: 20px; 
-            border-top: 3px solid #334155; 
+            padding: 15px 20px; 
+            border-top: 3px solid #334155;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
         }
-
         .history-label { 
-            font-size: 0.8rem; color: #64748b; font-weight: 800; 
+            font-size: 0.9rem; color: #64748b; font-weight: 800; 
             text-transform: uppercase; border-right: 2px solid #334155; 
-            padding-right: 15px; margin-right: 15px;
+            padding-right: 15px;
         }
-        
         .history-list { display: flex; gap: 15px; flex: 1; overflow: hidden; }
 
         .history-card { 
-            background: #1e293b; 
-            padding: 10px 15px; 
+            background: var(--card-bg); 
+            padding: 10px; 
             border-radius: 8px; 
-            flex: 0 0 180px;
+            flex: 0 0 clamp(160px, 15vw, 220px);
             box-shadow: 0 4px 6px rgba(0,0,0,0.3); 
-            animation: slideInBottom 0.5s ease-out forwards;
+            animation: slideIn 0.5s ease-out;
         }
+        .history-card b { font-size: 1.2rem; }
+        .history-card span.dept { font-size: 0.7rem; color: #94a3b8; display: block; text-transform: uppercase; }
 
-        /* QR SECTION - Hidden on very small screens to save space */
+        /* QR SECTION */
         .qr-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding-left: 15px;
             border-left: 2px solid #334155;
+            padding-left: 15px;
         }
-        .qr-image { height: 80px; width: 80px; background: white; padding: 3px; border-radius: 4px; }
-        .qr-subtext { font-size: 0.6rem; margin-top: 5px; text-align: center; }
+        .qr-image { height: 70px; width: 70px; background: white; padding: 3px; border-radius: 4px; }
+        .qr-subtext { font-size: 0.6rem; margin-top: 3px; text-align: center; font-weight: bold; }
 
-        /* MOBILE OVERRIDES (Screens smaller than 768px) */
-        @media (max-width: 768px) {
-            .column:first-child { border-right: none; }
-            .main-container { flex-direction: column; }
-            .footer-bar { flex-direction: column; height: auto; gap: 20px; }
-            .history-label { border-right: none; border-bottom: 2px solid #334155; padding-right: 0; padding-bottom: 10px; margin-right: 0; }
-            .qr-container { border-left: none; border-top: 2px solid #334155; padding-left: 0; padding-top: 15px; margin-left: 0; width: 100%; }
-            body { overflow-y: auto; } /* Allow scrolling on mobile */
+        @media (max-width: 600px) {
+            .footer-bar { flex-direction: column; text-align: center; }
+            .history-label, .qr-container { border: none; padding: 0; }
         }
 
         .flash { animation: highlight 0.8s ease-in-out 3; }
@@ -157,16 +156,15 @@
     <header>
         <img src="PSALOGO.png" alt="PSA Logo" class="logo">
         <div class="header-text">
-            <h1>PSA QUEUE</h1>
+            <h1>PHILIPPINE STATISTICS AUTHORITY</h1>
             <h2>NEGROS OCCIDENTAL</h2>
         </div>
     </header>
 
     <div class="notice-bar">
         <div class="notice-content">
-            <span class="notice-text">
-                <span class="notice-red">NOTICE:</span> <span class="notice-white">ONE NUMBER, ONE TRANSACTION</span>
-            </span>
+            <span class="notice-red">NOTICE:</span> ONE NUMBER, ONE TRANSACTION &nbsp;&nbsp;&nbsp; 
+            <span class="notice-red">NOTICE:</span> ONE NUMBER, ONE TRANSACTION
         </div>
     </div>
 
@@ -192,16 +190,85 @@
         <div class="history-label">PREVIOUSLY<br>CALLED</div>
         <div id="historyList" class="history-list"></div>
         <div class="qr-container">
+            <div style="font-size: 0.7rem; margin-bottom: 2px;">SCAN TO VIEW:</div>
             <img src="qrdisplay.png" alt="QR" class="qr-image">
-            <div class="qr-subtext">VIEW LIVE</div>
+            <div class="qr-subtext">LIVE MOBILE DISPLAY</div>
         </div>
     </div>
 
     <audio id="ding" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
 
 <script>
-    // [Keep your existing Firebase and Logic script here exactly as it was]
-    // The logic remains the same, only the CSS above was changed to handle responsiveness.
+    // --- FIREBASE SYNC (CONNECTS TO YOUR EXISTING admin.html) ---
+    const firebaseConfig = { databaseURL: "https://psa-queue-default-rtdb.asia-southeast1.firebasedatabase.app/" };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    let historyPageIndex = 0;
+    const CARDS_PER_PAGE = 5;
+    let latestHistoryData = [];
+
+    function updateFooter(history) {
+        const histListEl = document.getElementById('historyList');
+        if (!histListEl) return;
+        const totalItems = history.length;
+        if (totalItems === 0) {
+            histListEl.innerHTML = '<div style="opacity:0.5">No calls yet.</div>';
+            return;
+        }
+        const start = historyPageIndex * CARDS_PER_PAGE;
+        if (start >= totalItems) historyPageIndex = 0;
+        const pageItems = history.slice(historyPageIndex * CARDS_PER_PAGE, (historyPageIndex + 1) * CARDS_PER_PAGE);
+        histListEl.innerHTML = pageItems.map(item => `
+            <div class="history-card" style="border-left: 5px solid ${item.dept === 'REGISTRATION' ? 'var(--reg-red)' : 'var(--upd-yellow)'}">
+                <span class="dept">${item.dept}</span>
+                <b>#${item.num}</b> <small>(${item.type})</small>
+            </div>
+        `).join('');
+        historyPageIndex++;
+    }
+
+    db.ref('/').on('value', (snapshot) => {
+        const data = snapshot.val() || {};
+        const display = data.queue_display || {};
+        latestHistoryData = data.queue_history || []; 
+        const depts = ['REGISTRATION', 'UPDATING'];
+
+        depts.forEach(dept => {
+            const numEl = document.getElementById(`num-${dept}`);
+            const typeEl = document.getElementById(`type-${dept}`);
+            const tableEl = document.getElementById(`table-${dept}`);
+
+            if (display[dept]) {
+                const newNum = "#" + display[dept].num;
+                if (numEl.innerText !== newNum) {
+                    numEl.innerText = newNum;
+                    typeEl.innerText = display[dept].type;
+                    tableEl.innerText = display[dept].table;
+                    
+                    // Sound Play
+                    const audio = document.getElementById('ding');
+                    audio.currentTime = 0;
+                    audio.play().catch(() => console.log("Click screen once for sound"));
+                    
+                    numEl.classList.remove('flash');
+                    void numEl.offsetWidth;
+                    numEl.classList.add('flash');
+                }
+            } else {
+                numEl.innerText = "---";
+                typeEl.innerText = "VACANT";
+                tableEl.innerText = "0";
+            }
+        });
+        updateFooter(latestHistoryData);
+    });
+
+    setInterval(() => {
+        if (latestHistoryData.length > CARDS_PER_PAGE) {
+            updateFooter(latestHistoryData);
+        }
+    }, 8000);
 </script>
 </body>
 </html>
