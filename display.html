@@ -93,11 +93,24 @@
         .reg-col .dept-title, .reg-col .number { color: var(--reg-red); }
         .upd-col .dept-title, .upd-col .number { color: var(--upd-yellow); }
 
-        /* FOOTER ANIMATION STYLES */
-        .footer-bar { background: var(--footer-bg); height: 120px; display: flex; align-items: center; padding: 0 50px; border-top: 3px solid #334155; }
-        .history-label { font-size: 1rem; color: #64748b; font-weight: 800; text-transform: uppercase; border-right: 3px solid #334155; padding-right: 30px; margin-right: 30px; white-space: nowrap; line-height: 1.2; }
-        .history-list { display: flex; gap: 25px; flex: 1; }
+        /* FOOTER BAR CORRECTED */
+        .footer-bar { 
+            background: var(--footer-bg); 
+            height: 150px; 
+            display: flex; 
+            align-items: center; 
+            padding: 0 30px; 
+            border-top: 3px solid #334155; 
+        }
+
+        .history-label { 
+            font-size: 1rem; color: #64748b; font-weight: 800; 
+            text-transform: uppercase; border-right: 3px solid #334155; 
+            padding-right: 30px; margin-right: 30px; white-space: nowrap; line-height: 1.2; 
+        }
         
+        .history-list { display: flex; gap: 25px; flex: 1; overflow: hidden; }
+
         .history-card { 
             background: #1e293b; 
             padding: 12px 20px; 
@@ -128,58 +141,47 @@
         .history-card span.type { font-size: 1rem; font-weight: 800; color: white; }
         .history-card span.dept { font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; font-weight: 800; display: block; letter-spacing: 1px; }
 
-        @keyframes popIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+        /* QR SECTION WITHIN FOOTER */
+        .qr-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding-left: 20px;
+            border-left: 3px solid #334155;
+            margin-left: 10px;
+            height: 100%;
+        }
+
+        .qr-label {
+            font-size: 0.8rem;
+            font-weight: 900;
+            color: #ffffff;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        .qr-image {
+            width: 80px;
+            height: 80px;
+            background: white;
+            padding: 4px;
+            border-radius: 5px;
+        }
+
+        .qr-subtext {
+            font-size: 0.65rem;
+            font-weight: 800;
+            color: #ffffff;
+            text-align: center;
+            text-transform: uppercase;
+            margin-top: 5px;
+            line-height: 1.1;
+        }
+
         .flash { animation: highlight 0.8s ease-in-out 3; }
         @keyframes highlight { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-
-        /* QR SECTION STYLES */
-.qr-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding-left: 20px;
-    border-left: 3px solid #334155;
-    margin-left: 10px;
-    height: 100%;
-}
-
-.qr-label {
-    font-size: 0.9rem;
-    font-weight: 900;
-    color: #ffffff;
-    text-transform: uppercase;
-    margin-bottom: 5px;
-    letter-spacing: 1px;
-}
-
-.qr-image {
-    width: 100px;
-    height: 100px;
-    background: white;
-    padding: 5px;
-    border-radius: 5px;
-}
-
-.qr-subtext {
-    font-size: 0.75rem;
-    font-weight: 800;
-    color: #ffffff;
-    text-align: center;
-    text-transform: uppercase;
-    margin-top: 5px;
-    line-height: 1.1;
-}
-
-/* Adjust footer bar to accommodate the QR code */
-.footer-bar { 
-    background: var(--footer-bg); 
-    height: 150px; /* Increased height slightly for better spacing */
-    display: flex; 
-    align-items: center; 
-    padding: 0 30px; 
-    border-top: 3px solid #334155; 
-}
         
     </style>
 </head>
@@ -197,8 +199,6 @@
         <div class="notice-content">
             <span class="notice-text">
                 <span class="notice-red">NOTICE:</span> <span class="notice-white">ONE NUMBER, ONE TRANSACTION</span>
-                <span class="notice-red" style="margin-left: 100px;">NOTICE:</span> <span class="notice-white">ONE NUMBER, ONE TRANSACTION</span>
-                <span class="notice-red" style="margin-left: 100px;">NOTICE:</span> <span class="notice-white">ONE NUMBER, ONE TRANSACTION</span>
                 <span class="notice-red" style="margin-left: 100px;">NOTICE:</span> <span class="notice-white">ONE NUMBER, ONE TRANSACTION</span>
                 <span class="notice-red" style="margin-left: 100px;">NOTICE:</span> <span class="notice-white">ONE NUMBER, ONE TRANSACTION</span>
                 <span class="notice-red" style="margin-left: 100px;">NOTICE:</span> <span class="notice-white">ONE NUMBER, ONE TRANSACTION</span>
@@ -224,17 +224,18 @@
         </div>
     </div>
 
+    <!-- Corrected Footer with QR nested inside -->
     <div class="footer-bar">
         <div class="history-label">PREVIOUSLY CALLED<br>(WAITING/NO-SHOW)</div>
+        
         <div id="historyList" class="history-list"></div>
-    </div>
 
-    <div class="qr-container">
-        <div class="qr-label">SCAN TO:</div>
-        <img src="qrdisplay.png" alt="QR Code" class="qr-image">
-        <div class="qr-subtext">VIEW LIVE<br>MOBILE DISPLAY</div>
+        <div class="qr-container">
+            <div class="qr-label">SCAN TO:</div>
+            <img src="qrdisplay.png" alt="QR Code" class="qr-image">
+            <div class="qr-subtext">VIEW LIVE<br>MOBILE DISPLAY</div>
+        </div>
     </div>
-</div>
 
     <audio id="ding" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"></audio>
 
@@ -243,7 +244,6 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // VARIABLES FOR FOOTER ANIMATION
     let historyPageIndex = 0;
     const CARDS_PER_PAGE = 5;
     let latestHistoryData = [];
@@ -258,7 +258,6 @@
             return;
         }
 
-        // Logic to cycle pages
         const start = historyPageIndex * CARDS_PER_PAGE;
         if (start >= totalItems) {
             historyPageIndex = 0;
@@ -311,11 +310,9 @@
             }
         });
 
-        // Initial footer render when data arrives
         updateFooter(latestHistoryData);
     });
 
-    // SET INTERVAL TO CYCLE FOOTER EVERY 8 SECONDS
     setInterval(() => {
         if (latestHistoryData.length > CARDS_PER_PAGE) {
             const cards = document.querySelectorAll('.history-card');
