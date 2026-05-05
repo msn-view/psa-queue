@@ -79,9 +79,39 @@
         .queue-panel { background: var(--panel-bg); border-radius: 15px; padding: 15px; min-height: 300px; }
         
         /* Restore image_2c32a0.png Design */
-        .queue-row {  background: white; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; padding: 2px 5px; }
-        .queue-row h3 { margin: 0; font-size: 19px; color: var(--psa-blue); font-weight: 900; }
-        .serve-pill { font-size: 14px; padding: 6px 20px; }
+        /* Container for the rows to add padding at the top */
+.queue-panel { 
+    background: var(--panel-bg); 
+    border-radius: 15px; 
+    padding: 20px 15px; /* Increased top padding */
+    min-height: 300px; 
+}
+
+/* Individual Row with Bottom Border Line */
+.queue-row { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 10px 5px; 
+    border-bottom: 2px solid #b0b8c1; /* The separator line from your image */
+    margin-bottom: 5px;
+}
+
+/* Typography for the Ticket Number */
+.queue-row h3 { 
+    margin: 0; 
+    font-size: 19px; 
+    color: var(--psa-blue); 
+    font-weight: 900; 
+    letter-spacing: 0.5px;
+}
+
+/* Serve Button as a Pill */
+.serve-pill { 
+    font-size: 13px; 
+    padding: 6px 22px; 
+    letter-spacing: 1px;
+}
         
         .not-catered-title { 
             color: #4a5568; font-size: 13px; font-weight: 800; margin-bottom: 12px; 
