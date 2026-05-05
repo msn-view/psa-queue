@@ -10,85 +10,93 @@
             --psa-blue: #1a4a7c; 
             --psa-light-blue: #3e6d9c; 
             --psa-bg: #808080; 
-            --accent-teal: #17a2b8; 
+            --accent-teal: #11a9bc; 
             --panel-bg: #d1d9e2; 
-            --history-bg: #e2e8f0; 
         }
         
         body { font-family: 'Segoe UI', sans-serif; background: var(--psa-bg); margin: 0; padding: 0; color: #333; }
         
-        header { padding: 10px; display: flex; align-items: center; justify-content: center; color: white; background: rgba(0,0,0,0.1); }
-        .logo { width: 60px; margin-right: 15px; }
-        .header-text h1 { margin: 0; font-size: 22px; letter-spacing: 1px; }
-        .header-text p { margin: 0; font-size: 18px; text-align: center; font-weight: bold; }
+        /* Bigger Header */
+        header { padding: 25px 10px; display: flex; align-items: center; justify-content: center; color: white; background: rgba(0,0,0,0.15); }
+        .logo { width: 85px; margin-right: 20px; }
+        .header-text h1 { margin: 0; font-size: 32px; letter-spacing: 2px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .header-text p { margin: 0; font-size: 24px; text-align: center; font-weight: bold; }
 
         .management-bar { 
-            background: #222; color: white; width: 95%; margin: 10px auto; 
-            padding: 8px 20px; border-radius: 25px; display: flex; 
+            background: #222; color: white; width: 95%; margin: 15px auto; 
+            padding: 10px 25px; border-radius: 30px; display: flex; 
             justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
         
-        .reset-btn { background: #8b1a1a; color: white; border: none; padding: 5px 15px; border-radius: 15px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .reset-btn { background: #8b1a1a; color: white; border: none; padding: 6px 18px; border-radius: 20px; cursor: pointer; font-weight: bold; transition: 0.3s; }
         .reset-btn:hover { background: #ff4d4d; }
-        .logout-btn { background: #444; color: white; border: none; padding: 5px 15px; border-radius: 15px; cursor: pointer; font-weight: bold; margin-left: 10px; }
+        .logout-btn { background: #444; color: white; border: none; padding: 6px 18px; border-radius: 20px; cursor: pointer; font-weight: bold; margin-left: 10px; }
 
-        .tabs-container { display: flex; justify-content: center; gap: 15px; margin: 15px 0; }
+        .tabs-container { display: flex; justify-content: center; gap: 15px; margin: 20px 0; }
         .tab-link { 
-            background: white; color: var(--psa-blue); border: none; padding: 10px 40px; 
-            border-radius: 25px; font-weight: 900; cursor: pointer; transition: 0.3s; font-size: 18px;
+            background: white; color: var(--psa-blue); border: none; padding: 12px 50px; 
+            border-radius: 30px; font-weight: 900; cursor: pointer; transition: 0.3s; font-size: 20px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
         .tab-link.active { background: var(--psa-blue); color: white; transform: scale(1.05); }
 
-        /* Two-Column Layout Container */
-        .dashboard-wrapper { 
-            display: flex; width: 98%; margin: 0 auto; gap: 20px; align-items: flex-start;
-        }
+        .dashboard-wrapper { display: flex; width: 98%; margin: 0 auto; gap: 20px; align-items: flex-start; }
 
         /* Left Side: Main Controls */
         .main-card { 
-            background: white; flex: 2; border-radius: 25px; padding: 25px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3); min-height: 500px;
+            background: white; flex: 2.2; border-radius: 25px; padding: 25px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); min-height: 550px;
         }
 
         /* Right Side: History */
         .history-card { 
             background: white; flex: 1; border-radius: 25px; padding: 20px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3); min-height: 500px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); min-height: 550px;
         }
 
-        .dept-title { text-align: center; color: var(--psa-blue); font-size: 24px; font-weight: 800; margin-top: 0; }
+        .dept-title { text-align: center; color: var(--psa-blue); font-size: 28px; font-weight: 800; margin-top: 0; margin-bottom: 15px; }
         
-        .serving-box { background: var(--panel-bg); border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 20px; }
-        .serving-box h2 { color: var(--psa-blue); margin: 5px 0; font-size: 32px; font-weight: 900; }
+        /* Restore image_2c35e0.png Design */
+        .serving-box { background: var(--panel-bg); border-radius: 20px; padding: 25px; text-align: center; margin-bottom: 25px; }
+        .serving-box small { color: var(--psa-blue); font-weight: 600; font-size: 18px; letter-spacing: 1px; }
+        .serving-box h2 { color: var(--psa-blue); margin: 10px 0; font-size: 42px; font-weight: 900; }
         
-        .mark-done-btn { background: var(--accent-teal); color: white; border: none; padding: 10px 25px; border-radius: 20px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        /* Pill Buttons */
+        .pill-btn { 
+            background: var(--accent-teal); color: white; border: none; 
+            padding: 10px 30px; border-radius: 25px; cursor: pointer; 
+            font-weight: 900; font-size: 18px; text-transform: uppercase; 
+            transition: 0.2s; box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+        }
+        .pill-btn:hover { background: #0e8c9c; transform: translateY(-2px); }
 
-        .controls { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 20px; font-weight: bold; }
-        .add-btn { color: white; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 14px; }
+        .controls { display: flex; justify-content: center; align-items: center; gap: 12px; margin-bottom: 25px; font-weight: bold; font-size: 16px; }
+        .add-btn { color: white; border: none; padding: 12px 22px; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 15px; }
         .add-reg { background: var(--psa-blue); }
         .add-pri { background: #2c3e50; }
 
         .queues-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .queue-panel { background: var(--panel-bg); border-radius: 15px; padding: 15px; min-height: 250px; }
+        .queue-panel { background: var(--panel-bg); border-radius: 15px; padding: 15px; min-height: 300px; }
         
-        .queue-row { background: white; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; padding: 10px; border-radius: 10px; }
-        .queue-row h3 { margin: 0; font-size: 16px; color: var(--psa-blue); }
-        
-        .serve-btn { background: var(--accent-teal); color: white; border: none; padding: 5px 12px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        /* Restore image_2c32a0.png Design */
+        .queue-row { margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; padding: 2px 5px; }
+        .queue-row h3 { margin: 0; font-size: 19px; color: var(--psa-blue); font-weight: 900; }
+        .serve-pill { font-size: 14px; padding: 6px 20px; }
 
         .not-catered-title { 
-            color: #4a5568; font-size: 12px; font-weight: 800; margin-bottom: 10px; 
+            color: #4a5568; font-size: 13px; font-weight: 800; margin-bottom: 12px; 
             text-transform: uppercase; border-bottom: 2px solid #ddd; padding-bottom: 5px;
         }
-        .history-list-scroll { max-height: 500px; overflow-y: auto; }
-        .history-row { display: flex; justify-content: space-between; align-items: center; padding: 8px; border-bottom: 1px solid #eee; }
+        .history-list-scroll { max-height: 520px; overflow-y: auto; }
+        .history-row { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; }
         
         .tab-content { display: none; }
         .tab-content.active { display: block; }
     </style>
 </head>
 <body>
+
+    <div id="bg-overlay" class="bg-image"></div>
 
     <header>
         <img src="PSALOGO.png" alt="" class="logo">
@@ -124,7 +132,7 @@
     </div>
 
 <script>
-    // Security Check
+    // Security & Firebase Initialization (Same as before)
     const session = localStorage.getItem('psa_admin_session');
     const currentTime = new Date().getTime();
     if (!session || currentTime > session) {
@@ -132,7 +140,6 @@
         window.location.href = "login.html";
     }
     
-    // Firebase Config
     const firebaseConfig = { databaseURL: "https://psa-queue-default-rtdb.asia-southeast1.firebasedatabase.app/" };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
@@ -151,11 +158,11 @@
                 <div class="serving-box">
                     <small>CURRENTLY AT TABLE</small>
                     <h2 id="now-${dept}">NONE</h2>
-                    <button class="mark-done-btn" onclick="markDone('${dept}')">MARK AS DONE</button>
+                    <button class="pill-btn" onclick="markDone('${dept}')">MARK AS DONE</button>
                 </div>
                 <div class="controls">
                     <span>TABLE (1-5):</span>
-                    <input type="number" id="table-${dept}" style="width:40px; padding:5px; border-radius:5px; border:1px solid #ccc" value="${dept==='REGISTRATION'?3:4}" min="1" max="5">
+                    <input type="number" id="table-${dept}" style="width:45px; padding:6px; border-radius:8px; border:1px solid #ccc" value="${dept==='REGISTRATION'?3:4}" min="1" max="5">
                     <button class="add-btn add-reg" onclick="addTicket('${dept}', 'REGULAR')">+REGULAR</button>
                     <button class="add-btn add-pri" onclick="addTicket('${dept}', 'PRIORITY')">+PRIORITY</button>
                 </div>
@@ -171,12 +178,7 @@
     db.ref('/').on('value', (snapshot) => {
         if (!isInitialized) return;
         const data = snapshot.val() || {};
-        
-        window.currentCounters = data.counters || { 
-            REGISTRATION: {REGULAR:1, PRIORITY:1}, 
-            UPDATING: {REGULAR:1, PRIORITY:1} 
-        };
-        
+        window.currentCounters = data.counters || { REGISTRATION: {REGULAR:1, PRIORITY:1}, UPDATING: {REGULAR:1, PRIORITY:1} };
         window.currentHistory = data.queue_history || [];
         window.currentDisplay = data.queue_display || {};
         localQueues = data.queues || { REGISTRATION: { REGULAR: [], PRIORITY: [] }, UPDATING: { REGULAR: [], PRIORITY: [] } };
@@ -185,7 +187,6 @@
             if (!localQueues[d]) localQueues[d] = { REGULAR: [], PRIORITY: [] };
             render(d);
         });
-
         renderGlobalHistory();
     });
 
@@ -197,7 +198,6 @@
     }
 
     function addTicket(dept, type) {
-        if (!window.currentCounters || !window.currentCounters[dept]) return;
         const nextNum = window.currentCounters[dept][type];
         if (!localQueues[dept][type]) localQueues[dept][type] = [];
         localQueues[dept][type].push(nextNum);
@@ -219,17 +219,11 @@
                 dept: dept,
                 timestamp: Date.now()
             });
-            // REMOVED: history.pop() limit to allow unlimited history
         }
 
         display[dept] = { num: ticketNum, type: type, table: table };
         localQueues[dept][type].splice(index, 1);
-
-        db.ref('/').update({ 
-            queue_display: display, 
-            queue_history: history, 
-            queues: localQueues 
-        });
+        db.ref('/').update({ queue_display: display, queue_history: history, queues: localQueues });
     }
 
     function markDone(dept) {
@@ -252,36 +246,47 @@
 
         if (regList) {
             regList.innerHTML = (localQueues[dept].REGULAR || []).map((num, i) => `
-                <div class="queue-row"><h3>#${num} (REG)</h3><button class="serve-btn" onclick="serve('${dept}', 'REGULAR', ${i})">SERVE</button></div>`).join('');
+                <div class="queue-row">
+                    <h3># ${num} (REGULAR)</h3>
+                    <button class="pill-btn serve-pill" onclick="serve('${dept}', 'REGULAR', ${i})">SERVE</button>
+                </div>`).join('');
         }
         if (priList) {
             priList.innerHTML = (localQueues[dept].PRIORITY || []).map((num, i) => `
-                <div class="queue-row"><h3>#${num} (PRI)</h3><button class="serve-btn" onclick="serve('${dept}', 'PRIORITY', ${i})">SERVE</button></div>`).join('');
+                <div class="queue-row">
+                    <h3># ${num} (PRIORITY)</h3>
+                    <button class="pill-btn serve-pill" onclick="serve('${dept}', 'PRIORITY', ${i})">SERVE</button>
+                </div>`).join('');
         }
 
         const d = window.currentDisplay || {};
-        if (nowEl) nowEl.innerText = d[dept] ? `#${d[dept].num}` : "NONE";
+        // Restore ticket type in "Now Serving"
+        if (nowEl) {
+            if (d[dept]) {
+                nowEl.innerText = `#${d[dept].num} (${d[dept].type})`;
+            } else {
+                nowEl.innerText = "NONE";
+            }
+        }
     }
 
     function renderGlobalHistory() {
         const histEl = document.getElementById('global-history-list');
         const h = window.currentHistory || [];
-        
         if (h.length === 0) {
             histEl.innerHTML = '<div style="color:#aaa; font-size:12px; padding:10px;">No pending no-shows.</div>';
             return;
         }
-
         histEl.innerHTML = h.map(item => `
             <div class="history-row">
-                <span style="font-size:13px; font-weight:bold; color:var(--psa-blue)">#${item.num} (${item.type}) - ${item.dept}</span>
-                <button class="serve-btn" style="background:#4a5568" onclick="markHistoryDone(${item.timestamp})">DONE</button>
+                <span style="font-size:14px; font-weight:900; color:var(--psa-blue)">#${item.num} (${item.type}) - ${item.dept}</span>
+                <button class="pill-btn serve-pill" style="background:#4a5568" onclick="markHistoryDone(${item.timestamp})">DONE</button>
             </div>
         `).join('');
     }
 
     function resetQueue() { 
-        if(confirm("Reset all? This will wipe the database and start from #1.")) {
+        if(confirm("Reset all? This will restart all counters from #1.")) {
             db.ref('/').remove(); 
             location.reload();
         }
